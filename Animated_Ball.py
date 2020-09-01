@@ -32,6 +32,7 @@ def get_velocity():
     new_vector = pygame.math.Vector2(new_x, new_y)
     new_vector.normalize()
     new_vector *= in_velocity
+    return new_vector
 
 #Creating class for balls
 class MyCircle:
