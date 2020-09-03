@@ -1,5 +1,5 @@
-"""This project's target is to create an 8 pool ball enviroment, where the ball apears on the center of the table
-and while keeping steady speed, hits and deflects the walls of the table"""
+"""This project's target is to create an 8 pool ball enviroment, where only the black ball apears on the center of the table
+and while keeping steady speed, hits and deflects from walls of the table"""
 
 import sys, pygame, math, random
 from pygame.locals import*
