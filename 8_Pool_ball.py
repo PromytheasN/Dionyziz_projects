@@ -82,9 +82,6 @@ hole_6 = Holes(screen_width//2,screen_hight-5)
 #Create a list of the holes
 holes = [hole_1, hole_2, hole_3, hole_4, hole_5, hole_6]
 
-
-
-
 #Game Loop
 while True:
     
