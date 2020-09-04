@@ -70,14 +70,16 @@ class Hole:
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.size)
 
 
+hole_factor = Hole
+
 ball = PoolBall(screen_width//2, screen_hight//2)
 
-hole_1 = Hole(5, 5)
-hole_2 = Hole(5, screen_hight - 5)
-hole_3 = Hole(screen_width - 5, 5)
-hole_4 = Hole(screen_width - 5, screen_hight - 5)
-hole_5 = Hole(screen_width // 2, 5)
-hole_6 = Hole(screen_width // 2, screen_hight - 5)
+hole_1 = hole_factor(5, 5)
+hole_2 = hole_factor(5, screen_hight - 5)
+hole_3 = hole_factor(screen_width - 5, 5)
+hole_4 = hole_factor(screen_width - 5, screen_hight - 5)
+hole_5 = hole_factor(screen_width // 2, 5)
+hole_6 = hole_factor(screen_width // 2, screen_hight - 5)
 
 holes = [hole_1, hole_2, hole_3, hole_4, hole_5, hole_6]
 
