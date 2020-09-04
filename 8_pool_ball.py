@@ -76,7 +76,7 @@ coords = [(5, 5), (5, screen_hight - 5),
 
 holes = []
 for x, y in coords:
-          holes.append(Hole(x,y))
+    holes.append(Hole(x, y))
 
 ball = PoolBall(screen_width//2, screen_hight//2)
 
