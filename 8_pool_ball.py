@@ -68,8 +68,10 @@ class Hole:
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.size)
 
 
-coords = [(5, 5), (5, screen_hight - 5), (screen_width - 5, 5), (screen_width - 5, 5),
-          (screen_width - 5, screen_hight - 5), (screen_width // 2, 5),
+coords = [(5, 5), (5, screen_hight - 5),
+          (screen_width - 5, 5), (screen_width - 5, 5),
+          (screen_width - 5, screen_hight - 5),
+          (screen_width // 2, 5),
           (screen_width // 2, screen_hight - 5)]
 
 holes = []
