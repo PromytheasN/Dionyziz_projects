@@ -27,7 +27,7 @@ size = 30
 
 
 class PoolBall:
-    """Class that creates ball that have certain movement
+    """A ball that have certain movement
     speed and is displayed on the screen"""
 
     def __init__(self, x, y, xspeed=3, yspeed=3,
@@ -56,9 +56,8 @@ class PoolBall:
 
 
 class Hole:
-    """Class creates and diplays '8 pool ball hole'"""
+    """Diplays '8 pool ball hole'"""
     def __init__(self, x, y, color=(0, 0, 0), size=30, width=0):
-
         self.x = x
         self.y = y
         self.color = color
@@ -66,22 +65,18 @@ class Hole:
         self.width = width
 
     def display(self):
-
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.size)
 
 
-hole_factor = Hole
+coords = [(5, 5), (5, screen_hight - 5), (screen_width - 5, 5), (screen_width - 5, 5),
+          (screen_width - 5, screen_hight - 5), (screen_width // 2, 5),
+          (screen_width // 2, screen_hight - 5)]
+
+holes = []
+for x, y in coords:
+          holes.append(Hole(x,y))
 
 ball = PoolBall(screen_width//2, screen_hight//2)
-
-hole_1 = hole_factor(5, 5)
-hole_2 = hole_factor(5, screen_hight - 5)
-hole_3 = hole_factor(screen_width - 5, 5)
-hole_4 = hole_factor(screen_width - 5, screen_hight - 5)
-hole_5 = hole_factor(screen_width // 2, 5)
-hole_6 = hole_factor(screen_width // 2, screen_hight - 5)
-
-holes = [hole_1, hole_2, hole_3, hole_4, hole_5, hole_6]
 
 # Game Loop
 while True:
