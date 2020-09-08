@@ -13,6 +13,7 @@ pygame.init()
 white = (255, 255, 255)
 black = (0, 0, 0)
 dark_green = (0, 111, 0)
+light_green = (0, 255, 0)
 
 # Create an object to help track time so we can define max FPS
 clock = pygame.time.Clock()
@@ -103,7 +104,7 @@ def draw_grid(surface):
                 pygame.draw.rect(surface, dark_green, r)
             else:
                 rr = pygame.Rect((x*grid_size, y*grid_size), (grid_size,grid_size))
-                pygame.draw.rect(surface, dark_green, rr)
+                pygame.draw.rect(surface, light_green, rr)
 
 
 draw_grid(surface)
@@ -123,7 +124,7 @@ def game_loop():
         snake.handle_keys()
         draw_grid(surface)
         snake.move()
-        screen.fill(dark_green)
+        screen.blit(surface, (0,0))
         snake.draw(surface)
         pygame.display.update()
         clock.tick(20)
