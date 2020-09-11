@@ -20,7 +20,7 @@ left = (-1, 0)
 right = (1, 0)
 
 # Display
-screen_height = 540
+screen_height = 560
 screen_width = 960
 pygame.display.set_caption("Snake Game")
 
