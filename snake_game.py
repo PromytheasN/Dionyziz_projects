@@ -26,9 +26,15 @@ pygame.display.set_caption("Snake Game")
 
 # Grid
 grid_size = 20
-grid_width = screen_width / grid_size
-grid_height = screen_height / grid_size
+grid_width = int(screen_width / grid_size)
+grid_height = int(screen_height / grid_size)
 
+# Grid Walls
+y_axel = list(range(0, screen_height, grid_size))
+y_walls = list((0,o) for o in y_axel) + list((screen_width - grid_size, o) for o in y_axel)
+x_axel = list(range(0, screen_width, grid_size))
+x_walls = list((o,0) for o in x_axel) + list((o, screen_height - grid_size) for o in x_axel)
+walls = x_walls + y_walls
 
 class Snake():
     """A snake that has size 10, 
@@ -52,7 +58,6 @@ class Snake():
         else:
             self.direction = point
 
-    #Check this out
     def move(self):
         cur = self.get_head_position()
         x, y = self.direction
@@ -61,11 +66,13 @@ class Snake():
         #If the new position of head overlaps any of the other positions of the snake, game is ended
         if len(self.positions) > 2 and new in self.positions[2:]:
             self.reset()
+        elif self.positions[0] in walls:
+            self.reset()
         else:
             self.positions.insert(0,new)
             if len(self.positions) > self.length:
                 self.positions.pop()
-
+                
 
     def reset(self):
         self.lenth = 10
@@ -115,11 +122,11 @@ snake = Snake()
 # Game main
 def main():
     pygame.init()
-    
+
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((screen_width, screen_height))
 
- 
+
     surface = pygame.Surface(screen.get_size())
     surface = surface.convert()
     draw_grid(surface)
