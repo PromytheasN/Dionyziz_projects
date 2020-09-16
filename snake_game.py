@@ -134,16 +134,14 @@ class Food():
 
 
 def draw_grid(surface):
+
     for y in range(0, int(grid_height)):
         for x in range(0, int(grid_width)):
+            r = pygame.Rect((x*grid_size, y*grid_size),(grid_size, grid_size))
             if (x+y) % 2 == 0:
-                r = pygame.Rect((x*grid_size, y*grid_size),
-                                (grid_size, grid_size))
                 pygame.draw.rect(surface, dark_green, r)
             else:
-                rr = pygame.Rect((x*grid_size, y*grid_size),
-                                 (grid_size, grid_size))
-                pygame.draw.rect(surface, light_green, rr)
+                pygame.draw.rect(surface, light_green, r)
 
 
 snake = Snake()
