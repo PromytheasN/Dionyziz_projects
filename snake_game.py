@@ -129,6 +129,9 @@ class Food():
         r = pygame.Rect((self.position[0], self.position[1]), (grid_size, grid_size))
         pygame.draw.rect(surface, self.color, r)
 
+    def reset(self):
+        self.position = random_position()
+
 
 def draw_grid(surface):
     for y in range(0, int(grid_height)):
