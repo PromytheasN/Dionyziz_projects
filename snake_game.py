@@ -96,19 +96,18 @@ class Snake():
             pygame.draw.rect(surface, white, r, 1)
 
     def handle_keys(self):
+
+        # Keys Dictionarie
+        keys_d = {pygame.K_UP:up, pygame.K_DOWN:down,
+                  pygame.K_LEFT:left, pygame.K_RIGHT:right}
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    self.turn(up)
-                elif event.key == pygame.K_DOWN:
-                    self.turn(down)
-                elif event.key == pygame.K_LEFT:
-                    self.turn(left)
-                elif event.key == pygame.K_RIGHT:
-                    self.turn(right)
+                if event.key in keys_d:
+                    self.turn(keys_d[event.key])
                 elif event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
