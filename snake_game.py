@@ -84,7 +84,7 @@ class Snake():
                 self.positions.pop()
 
     def reset(self):
-        self.lenth = 10
+        self.length = 10
         self.positions = [((screen_width/2), (screen_height/2))]
         self.direction = random.choice([up, down, left, right])
         self.score = 0
