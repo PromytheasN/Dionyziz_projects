@@ -13,6 +13,7 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 dark_green = (0, 111, 0)
 light_green = (0, 255, 0)
+red = (200, 0, 0)
 
 # Possible snake movements
 up = (0, -1)
@@ -117,7 +118,7 @@ class Food():
     
     def __init__(self):
         self.position = (0, 0)
-        self.color = (0, 0, 0)
+        self.color = red
         self.random_position()
 
     def random_position(self):
