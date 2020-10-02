@@ -32,10 +32,10 @@ grid_width = int(screen_width / cell_size)
 grid_height = int(screen_height / cell_size)
 
 # Grid Walls
-y_axis = list(range(0, screen_height, cell_size))
+y_axis = range(0, screen_height, cell_size)
 y_walls = (list((0, y) for y in y_axis) +
            list((screen_width - cell_size, y) for y in y_axis))
-x_axis = list(range(0, screen_width, cell_size))
+x_axis = range(0, screen_width, cell_size)
 x_walls = (list((x, 0) for x in x_axis) +
            list((x, screen_height - cell_size) for x in x_axis))
 walls = x_walls + y_walls
@@ -111,10 +111,11 @@ class Snake():
                     sys.exit()
 
     def eat_food(self):
-        if self.get_head_position() == Food.random_position(food):
+        self.get_head_position()
+        if self.get_head_position() == food.get_position():
             self.length += 1
             self.score += 1
-            Food.random_position(food)
+            food.random_position()
 
 
 class Food():
@@ -123,6 +124,9 @@ class Food():
         self.position = (0, 0)
         self.color = red
         self.random_position()
+
+    def get_position(self):
+        return self.position
 
     def random_position(self):
         self.position = (random.randint(cell_size, grid_width - 2) * cell_size,
