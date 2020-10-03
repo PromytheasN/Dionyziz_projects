@@ -32,12 +32,12 @@ grid_width = int(screen_width / cell_size)
 grid_height = int(screen_height / cell_size)
 
 # Grid Walls
-y_axis = range(0, screen_height, cell_size)
+y_axis = range(0, grid_height * cell_size, cell_size)
 y_walls = (list((0, y) for y in y_axis) +
-           list((screen_width - cell_size, y) for y in y_axis))
-x_axis = range(0, screen_width, cell_size)
+           list((grid_width * cell_size - cell_size, y) for y in y_axis))
+x_axis = range(0, grid_width * cell_size, cell_size)
 x_walls = (list((x, 0) for x in x_axis) +
-           list((x, screen_height - cell_size) for x in x_axis))
+           list((x, grid_height * cell_size - cell_size) for x in x_axis))
 walls = x_walls + y_walls
 
 
