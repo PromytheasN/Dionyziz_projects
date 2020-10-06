@@ -88,7 +88,7 @@ class Snake():
         self.direction = random.choice([up, down, left, right])
         self.score = 0
 
-    def draw(self, surface):
+    def render(self, surface):
         for p in self.positions:
             r = pygame.Rect((p[0], p[1]), (cell_size, cell_size))
             pygame.draw.rect(surface, self.color, r)
@@ -132,7 +132,7 @@ class Food():
         self.position = (random.randint(cell_size, grid_width - 2) * cell_size,
                          random.randint(cell_size, grid_height - 2) * cell_size)
 
-    def draw(self, surface):
+    def render(self, surface):
         r = pygame.Rect((self.position[0], self.position[1]),
                         (cell_size, cell_size))
         pygame.draw.rect(surface, self.color, r)
@@ -141,7 +141,7 @@ class Food():
         self.position = random_position()
 
 
-def draw_grid(surface):
+def render_grid(surface):
     for y in range(0, int(grid_height)):
         for x in range(0, int(grid_width)):
             r = pygame.Rect((x*cell_size, y*cell_size), (cell_size, cell_size))
@@ -164,18 +164,18 @@ def main():
 
     surface = pygame.Surface(screen.get_size())
     surface = surface.convert()
-    draw_grid(surface)
+    render_grid(surface)
 
 
     while True:
 
         clock.tick(10)
         snake.handle_keys()
-        draw_grid(surface)
+        render_grid(surface)
         snake.move()
         snake.eat_food()
-        snake.draw(surface)
-        food.draw(surface)
+        snake.render(surface)
+        food.render(surface)
         screen.blit(surface, (0, 0))
         pygame.display.update()
 
