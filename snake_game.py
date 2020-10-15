@@ -44,9 +44,6 @@ x_walls = (list((x, 0) for x in x_axis) +
            list((x, grid_height - 1) for x in x_axis))
 walls = x_walls + y_walls
 
-print("x_walls: ", x_walls)
-print("y_walls", y_walls)
-
 
 class Snake():
     """A snake that has size 10,
@@ -137,6 +134,10 @@ class Food():
     def random_position(self):
         self.position = (random.randint(1, grid_width - 2),
                          random.randint(1, grid_height - 2))
+    
+    def check_food_loc(self):
+        if self.position in snake.positions:
+            self.random_position()
 
     def render(self, surface):
         r = pygame.Rect((self.position[0] * cell_size[0],
@@ -181,12 +182,10 @@ def main():
         snake.move()
         snake.eat_food()
         snake.render(surface)
+        food.check_food_loc()
         food.render(surface)
         screen.blit(surface, (0, 0))
         pygame.display.update()
 
 
 main()
-
-
-#Testing git 
