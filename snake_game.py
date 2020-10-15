@@ -186,8 +186,8 @@ def main():
         food.check_food_loc()
         food.render(surface)
         screen.blit(surface, (0, 0))
-        text = txt_font.render("Score {0}".format(snake.score), 1, (0,0,0))
-        screen.blit(text, (5,10))
+        text = txt_font.render("Score {0}".format(snake.score), 1, (0, 0, 0))
+        screen.blit(text, (5, 10))
         pygame.display.update()
 
 
