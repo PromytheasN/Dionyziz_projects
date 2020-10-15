@@ -22,7 +22,7 @@ left = (-1, 0)
 right = (1, 0)
 
 # Display
-screen_height = 1000
+screen_height = 560
 screen_width = 920
 pygame.display.set_caption("Snake Game")
 
@@ -43,6 +43,10 @@ x_axis = range(0, grid_width)
 x_walls = (list((x, 0) for x in x_axis) +
            list((x, grid_height - 1) for x in x_axis))
 walls = x_walls + y_walls
+
+# Initializing font
+pygame.font.init()
+txt_font = pygame.font.SysFont('Score: ', 20)
 
 
 class Snake():
@@ -174,7 +178,6 @@ def main():
     surface = pygame.Surface(screen.get_size())
     surface = surface.convert()
     render_grid(surface)
-    txt_font = pygame.font.SysFont('Score: ', 20)
 
     while True:
         clock.tick(10)
