@@ -90,7 +90,7 @@ class Snake():
 
     def reset(self):
         self.length = 10
-        self.positions = [((grid_width // 2), (grid_height // 2))]
+        self.positions = [(grid_width // 2, grid_height // 2)]
         self.direction = random.choice([up, down, left, right])
         self.score = 0
 
@@ -154,8 +154,8 @@ class Food():
 
 
 def render_grid(surface):
-    for y in range(int(grid_height)):
-        for x in range(int(grid_width)):
+    for y in range(0, int(grid_height)):
+        for x in range(0, int(grid_width)):
             r = pygame.Rect((x * cell_size[0], y * cell_size[1]),
                             (cell_size[0], cell_size[1]))
             if (x + y) % 2 == 0:
@@ -191,7 +191,10 @@ def main():
         clock.tick(10)
         render_grid(surface)
         integrate()
+        snake.render(surface)
+        food.render(surface)
         screen.blit(surface, (0, 0))
+        food.check_food_loc()
         text = txt_font.render("Score {0}".format(snake.score), 1, (0, 0, 0))
         screen.blit(text, (5, 10))
         pygame.display.update()
