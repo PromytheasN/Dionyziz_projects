@@ -134,7 +134,7 @@ class Food():
     def random_position(self):
         self.position = (random.randint(1, grid_width - 2),
                          random.randint(1, grid_height - 2))
-    
+
     def check_food_loc(self):
         if self.position in snake.positions:
             self.random_position()
@@ -174,6 +174,7 @@ def main():
     surface = pygame.Surface(screen.get_size())
     surface = surface.convert()
     render_grid(surface)
+    txt_font = pygame.font.SysFont('Score: ', 20)
 
     while True:
         clock.tick(10)
@@ -185,6 +186,8 @@ def main():
         food.check_food_loc()
         food.render(surface)
         screen.blit(surface, (0, 0))
+        text = txt_font.render("Score {0}".format(snake.score), 1, (0,0,0))
+        screen.blit(text, (5,10))
         pygame.display.update()
 
 
