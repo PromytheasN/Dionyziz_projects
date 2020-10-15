@@ -64,7 +64,7 @@ class Snake():
         # Get position of the head of the snake
         return self.positions[0]
 
-    def turn(self, point): #Direction
+    def turn(self, point): 
         # Turn the snake to all direcations except the oposite
         # of it's current if longer than 1
         if self.length > 1 and (-point[0], -point[1]) == self.direction:
@@ -168,6 +168,14 @@ snake = Snake()
 food = Food()
 
 
+def integrate():
+    # Calls game logic related invocations
+    snake.handle_keys()
+    snake.move()
+    snake.eat_food()
+    food.check_food_loc()
+
+
 # Game main
 def main():
     pygame.init()
@@ -181,13 +189,8 @@ def main():
 
     while True:
         clock.tick(10)
-        snake.handle_keys()
         render_grid(surface)
-        snake.move()
-        snake.eat_food()
-        snake.render(surface)
-        food.check_food_loc()
-        food.render(surface)
+        integrate()
         screen.blit(surface, (0, 0))
         text = txt_font.render("Score {0}".format(snake.score), 1, (0, 0, 0))
         screen.blit(text, (5, 10))
