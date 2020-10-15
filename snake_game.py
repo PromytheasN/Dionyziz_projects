@@ -55,7 +55,7 @@ class Snake():
 
     def __init__(self):
         self.length = 10
-        self.positions = [((grid_width // 2), (grid_height // 2))]
+        self.positions = [(grid_width // 2, grid_height // 2)]
         self.direction = random.choice([up, down, left, right])
         self.color = black
         self.score = 0
@@ -64,18 +64,18 @@ class Snake():
         # Get position of the head of the snake
         return self.positions[0]
 
-    def turn(self, point):
+    def turn(self, point): #Direction
         # Turn the snake to all direcations except the oposite
         # of it's current if longer than 1
         if self.length > 1 and (-point[0], -point[1]) == self.direction:
-            return
+            pass
         else:
             self.direction = point
 
     def move(self):
         cur = self.get_head_position()
         x, y = self.direction
-        new = ((cur[0] + x), (cur[1] + y))
+        new = (cur[0] + x, cur[1] + y)
         # If the new position of head overlaps any
         # of the other positions of the snake, game is ended
         if len(self.positions) > 2 and new in self.positions[2:]:
@@ -154,8 +154,8 @@ class Food():
 
 
 def render_grid(surface):
-    for y in range(0, int(grid_height)):
-        for x in range(0, int(grid_width)):
+    for y in range(int(grid_height)):
+        for x in range(int(grid_width)):
             r = pygame.Rect((x * cell_size[0], y * cell_size[1]),
                             (cell_size[0], cell_size[1]))
             if (x + y) % 2 == 0:
