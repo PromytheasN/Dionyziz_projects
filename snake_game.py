@@ -44,7 +44,7 @@ x_walls = (list((x, 0) for x in x_axis) +
            list((x, grid_height - 1) for x in x_axis))
 walls = x_walls + y_walls
 
-# Initializing font
+# Initializing text font
 pygame.font.init()
 txt_font = pygame.font.SysFont('Score: ', 20)
 
@@ -129,10 +129,11 @@ class Food():
     def random_position(self):
         self.position = (random.randint(1, grid_width - 2),
                          random.randint(1, grid_height - 2))
+        while self.check_food_loc():
+            self.random_position()
 
     def check_food_loc(self):
-        if self.position in snake.positions:
-            self.random_position()
+        return self.position in snake.positions
 
     def render(self, surface):
         r = pygame.Rect((self.position[0] * cell_size[0],
@@ -183,9 +184,11 @@ def integrate():
     snake.eat_food()
     food.check_food_loc()
 
+
 def render_classes(surface):
     snake.render(surface)
     food.render(surface)
+
 
 def render_text(screen):
     text = txt_font.render("Score: {0}".format(snake.score), 1, (0, 0, 0))
@@ -209,7 +212,6 @@ def main():
         integrate()
         render_classes(surface)
         screen.blit(surface, (0, 0))
-        food.check_food_loc()
         render_text(screen)
         pygame.display.update()
 
