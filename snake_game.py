@@ -183,6 +183,14 @@ def integrate():
     snake.eat_food()
     food.check_food_loc()
 
+def render_classes(surface):
+    snake.render(surface)
+    food.render(surface)
+
+def render_text(screen):
+    text = txt_font.render("Score: {0}".format(snake.score), 1, (0, 0, 0))
+    return screen.blit(text, (5, 10))
+
 
 # Game main
 def main():
@@ -199,12 +207,10 @@ def main():
         clock.tick(10)
         render_grid(surface)
         integrate()
-        snake.render(surface)
-        food.render(surface)
+        render_classes(surface)
         screen.blit(surface, (0, 0))
         food.check_food_loc()
-        text = txt_font.render("Score {0}".format(snake.score), 1, (0, 0, 0))
-        screen.blit(text, (5, 10))
+        render_text(screen)
         pygame.display.update()
 
 
