@@ -64,14 +64,14 @@ class Snake():
         # Get position of the head of the snake
         return self.positions[0]
 
-    def check_new_direction(self, direction):
+    def valid_direction(self, direction):
         return self.length > 1 and (-direction[0],
                                     -direction[1]) == self.direction
 
     def turn(self, direction):
         # Turn the snake to all direcations except the oposite
         # of it's current if longer than 1
-        if self.check_new_direction(direction):
+        if self.valid_direction(direction):
             pass
         else:
             self.direction = direction
@@ -86,9 +86,7 @@ class Snake():
         cur = self.get_head_position()
         x, y = self.direction
         new = (cur[0] + x, cur[1] + y)
-        if self.eat_self(new):
-            self.reset()
-        elif self.touches_wall():
+        if self.eat_self(new) or self.touches_wall():
             self.reset()
         else:
             self.positions.insert(0, new)
@@ -185,7 +183,7 @@ def integrate():
     food.check_food_loc()
 
 
-def render_classes(surface):
+def render_game_objects(surface):
     snake.render(surface)
     food.render(surface)
 
@@ -210,7 +208,7 @@ def main():
         clock.tick(10)
         render_grid(surface)
         integrate()
-        render_classes(surface)
+        render_game_objects(surface)
         screen.blit(surface, (0, 0))
         render_text(screen)
         pygame.display.update()
