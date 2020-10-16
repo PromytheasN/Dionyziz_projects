@@ -64,14 +64,21 @@ class Snake():
         # Get position of the head of the snake
         return self.positions[0]
 
-    def turn(self, direction): 
+    def check_new_direction(self, direction):
+        return self.length > 1 and (-direction[0],
+                                    -direction[1]) == self.direction
+
+    def turn(self, direction):
         # Turn the snake to all direcations except the oposite
         # of it's current if longer than 1
-        if self.length > 1 and (-direction[0], -direction[1]) == self.direction:
+        if self.check_new_direction(direction):
             pass
         else:
             self.direction = direction
-    
+
+    def eat_self(self, new):
+        return len(self.positions) > 2 and new in self.positions[2:]
+
     def touches_wall(self):
         return self.positions[0] in walls
 
@@ -79,9 +86,7 @@ class Snake():
         cur = self.get_head_position()
         x, y = self.direction
         new = (cur[0] + x, cur[1] + y)
-        # If the new position of head overlaps any
-        # of the other positions of the snake, game is ended
-        if len(self.positions) > 2 and new in self.positions[2:]:
+        if self.eat_self(new):
             self.reset()
         elif self.touches_wall():
             self.reset()
@@ -102,22 +107,6 @@ class Snake():
                             (cell_size[0], cell_size[1]))
             pygame.draw.rect(surface, self.color, r)
             pygame.draw.rect(surface, white, r, 1)
-
-    def handle_keys(self):
-        # Keys Dictionarie
-        keys_d = {pygame.K_UP: up, pygame.K_DOWN: down,
-                  pygame.K_LEFT: left, pygame.K_RIGHT: right}
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key in keys_d:
-                    self.turn(keys_d[event.key])
-                elif event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
 
     def eat_food(self):
         self.get_head_position()
@@ -155,6 +144,23 @@ class Food():
         self.position = self.random_position()
 
 
+def handle_keys():
+    # Keys Dictionarie
+    keys_d = {pygame.K_UP: up, pygame.K_DOWN: down,
+              pygame.K_LEFT: left, pygame.K_RIGHT: right}
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key in keys_d:
+                snake.turn(keys_d[event.key])
+            elif event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit()
+
+
 def render_grid(surface):
     for y in range(int(grid_height)):
         for x in range(int(grid_width)):
@@ -172,7 +178,7 @@ food = Food()
 
 def integrate():
     # Calls game logic related invocations
-    snake.handle_keys()
+    handle_keys()
     snake.move()
     snake.eat_food()
     food.check_food_loc()
