@@ -64,13 +64,16 @@ class Snake():
         # Get position of the head of the snake
         return self.positions[0]
 
-    def turn(self, point): 
+    def turn(self, direction): 
         # Turn the snake to all direcations except the oposite
         # of it's current if longer than 1
-        if self.length > 1 and (-point[0], -point[1]) == self.direction:
+        if self.length > 1 and (-direction[0], -direction[1]) == self.direction:
             pass
         else:
-            self.direction = point
+            self.direction = direction
+    
+    def touches_wall(self):
+        return self.positions[0] in walls
 
     def move(self):
         cur = self.get_head_position()
@@ -80,8 +83,7 @@ class Snake():
         # of the other positions of the snake, game is ended
         if len(self.positions) > 2 and new in self.positions[2:]:
             self.reset()
-        # If snake touches walls, game is ended
-        elif self.positions[0] in walls:
+        elif self.touches_wall():
             self.reset()
         else:
             self.positions.insert(0, new)
@@ -95,8 +97,8 @@ class Snake():
         self.score = 0
 
     def render(self, surface):
-        for p in self.positions:
-            r = pygame.Rect((p[0] * cell_size[0], p[1] * cell_size[1]),
+        for x, y in self.positions:
+            r = pygame.Rect((x * cell_size[0], y * cell_size[1]),
                             (cell_size[0], cell_size[1]))
             pygame.draw.rect(surface, self.color, r)
             pygame.draw.rect(surface, white, r, 1)
@@ -146,7 +148,7 @@ class Food():
     def render(self, surface):
         r = pygame.Rect((self.position[0] * cell_size[0],
                          self.position[1] * cell_size[1]),
-                        (cell_size[0], cell_size[1]))
+                        cell_size)
         pygame.draw.rect(surface, self.color, r)
 
     def reset(self):
@@ -154,8 +156,8 @@ class Food():
 
 
 def render_grid(surface):
-    for y in range(0, int(grid_height)):
-        for x in range(0, int(grid_width)):
+    for y in range(int(grid_height)):
+        for x in range(int(grid_width)):
             r = pygame.Rect((x * cell_size[0], y * cell_size[1]),
                             (cell_size[0], cell_size[1]))
             if (x + y) % 2 == 0:
