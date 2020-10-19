@@ -60,6 +60,13 @@ class Snake():
         self.color = black
         self.score = 0
 
+    def render(self, surface):
+        for x, y in self.positions:
+            r = pygame.Rect((x * cell_size[0], y * cell_size[1]),
+                            (cell_size[0], cell_size[1]))
+            pygame.draw.rect(surface, self.color, r)
+            pygame.draw.rect(surface, white, r, 1)
+
     def get_head_position(self):
         # Get position of the head of the snake
         return self.positions[0]
@@ -99,13 +106,6 @@ class Snake():
         self.direction = random.choice([up, down, left, right])
         self.score = 0
 
-    def render(self, surface):
-        for x, y in self.positions:
-            r = pygame.Rect((x * cell_size[0], y * cell_size[1]),
-                            (cell_size[0], cell_size[1]))
-            pygame.draw.rect(surface, self.color, r)
-            pygame.draw.rect(surface, white, r, 1)
-
     def eat_food(self):
         self.get_head_position()
         if self.get_head_position() == food.get_position():
@@ -121,6 +121,12 @@ class Food():
         self.color = red
         self.random_position()
 
+    def render(self, surface):
+        r = pygame.Rect((self.position[0] * cell_size[0],
+                         self.position[1] * cell_size[1]),
+                        cell_size)
+        pygame.draw.rect(surface, self.color, r)
+
     def get_position(self):
         return self.position
 
@@ -132,12 +138,6 @@ class Food():
 
     def check_food_loc(self):
         return self.position in snake.positions
-
-    def render(self, surface):
-        r = pygame.Rect((self.position[0] * cell_size[0],
-                         self.position[1] * cell_size[1]),
-                        cell_size)
-        pygame.draw.rect(surface, self.color, r)
 
     def reset(self):
         self.position = self.random_position()
