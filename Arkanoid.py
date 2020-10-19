@@ -9,6 +9,7 @@ import random
 white = (255, 255, 255)
 black = (0, 0, 0)
 orange = (255, 100, 10)
+light_blue = (0, 255, 255)
 
 # Display
 screen_height = 999
@@ -36,7 +37,7 @@ class Bricks():
     def render(self, surface):
         r_brick = pygame.Rect((self.position[1],
                                 self.position[0]), self.size[0], self.size[1])
-        pygame.draw.rect(surface, self.color, r)
+        pygame.draw.rect(surface, self.color, r_brick)
 
     def get_position(self):
         return self.position
@@ -59,10 +60,19 @@ class Bricks():
 class Ball():
     
     def __init__(self):
-        self.position = ()
+        self.position = (0, 0)
+        self.radius = screen_height // 100
+        self.color = light_blue
 
-    def render(self):
-        pass
+
+    def render(self, surface):
+        c_ball = pygame.Rect(self.position[0] - self.radius, self.position[1] - self.radius,
+                             self.radius * 2, self.radius * 2)
+        pygame.draw.circle(surface, self.color, c_ball, self.radius)
+
+    def random_direction(self):
+        
+
 
 class Base_board():
 
