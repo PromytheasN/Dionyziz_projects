@@ -102,9 +102,11 @@ class Base_board(pygame.sprite.Sprite):
     def movement(self):
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_LEFT]:
-            self.x_direction = -3
+            if not self.rect.left <= 0:
+                self.x_direction = -(display_width / 148)
         elif keystate[pygame.K_RIGHT]:
-            self.x_direction = 3
+            if not self.rect.right >= display_width:
+                self.x_direction = display_width / 148
 
     def shoot(self):
         pass
