@@ -11,7 +11,7 @@ black = (0, 0, 0)
 orange = (255, 100, 10)
 light_blue = (0, 255, 255)
 shadow = (192, 192, 192)
-purple = (102, 0, 102)
+purple = (152, 0, 152)
 light_blue = (0, 0, 255)
 
 # Display
@@ -27,22 +27,27 @@ up = (0, 1)
 diagonal_left = (-1, 1)
 diagonal_right = (1, 1)
 
-# Classes dimentions
+# Game objects dimentions
 base_dimentions =(display_width // 10, display_height // 100)
+brick_dimentions = (display_width // 20, display_height // 100)
 
 # Initializing text font
 pygame.font.init()
 txt_font = pygame.font.SysFont("Score: ", display_height//10)
 
-class Brick():
+class Brick(pygame.sprite.Sprite):
 
-    def __init__(self, p_value, str_value):
-        self.position = (0, 0)
-        self.color = orange
-        self.random_position()
-        self.size = (display_width // 20, display_height // 100)
-        self.p_value = p_value
-        self.str_value = str_value
+    # def __init__(self, p_value, str_value):
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface(brick_dimentions)
+        self.image.fill(purple)
+        self.rect = self.image.get_rect()
+        self.rect.center = self.random_position()
+
+        # self.p_value = p_value
+        # self.str_value = str_value
 
     def render(self, surface):
         r_brick = pygame.Rect((self.position[1],
@@ -53,8 +58,9 @@ class Brick():
         return self.position
 
     def random_position(self):
-        self.position = (0, random.randint(display_width - self.size[1]),
-                         random.randit(0, display_height // 2))
+        self.position = (random.randint(0, display_width - brick_dimentions[1]),
+                         random.randint(0, display_height // 2))
+        return self.position
         # while self.location self.location_check():
             # self.random_position()
 
@@ -85,6 +91,7 @@ class Ball():
         pass
 
 class Base_board(pygame.sprite.Sprite):
+    """Initiates base_board and it's attributes"""
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -95,11 +102,13 @@ class Base_board(pygame.sprite.Sprite):
         self.x_direction = 0
 
     def update(self):
+        # Up-dates classes' position according to user's imput
         self.x_direction = 0
         self.movement()
         self.rect.x += self.x_direction
 
     def movement(self):
+        # Creates movement and constrains object within screen dimentions
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_LEFT]:
             if not self.rect.left <= 0:
@@ -131,7 +140,9 @@ def render():
 # Initializing sprite list and adding all sprites on it
 all_sprites = pygame.sprite.Group()
 board = Base_board()
+brick = Brick()
 all_sprites.add(board)
+all_sprites.add(brick)
 
 # Game main
 def main():
