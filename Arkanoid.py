@@ -30,6 +30,7 @@ diagonal_right = (1, 1)
 # Game objects dimentions
 base_dimentions =(display_width // 10, display_height // 100)
 brick_dimentions = (display_width // 20, display_height // 100)
+ball_dimentions = (display_height // 100, display_height // 100)
 
 # Initializing text font
 pygame.font.init()
@@ -73,19 +74,23 @@ class Brick(pygame.sprite.Sprite):
     def location_check(self):
         return self.location in bricks  # List has to be created
 
-class Ball():
+class Ball(pygame.sprite.Sprite):
+    """Initiates a moving ball and its' attributes"""
     
     def __init__(self):
-        self.position = (0, 0)
-        self.radius = display_height // 100
-        self.color = light_blue
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface(ball_dimentions)
+        self.image.fill(light_blue)
+        self.rect = self.image.get_rect()
+        self.rect.center = self.init_position()
+
         self.direction = random.choice([diagonal_left, diagonal_right])
 
-
-    def render(self, surface):
-        c_ball = pygame.Rect(self.position[0] - self.radius, self.position[1] - self.radius,
-                             self.radius * 2, self.radius * 2)
-        pygame.draw.circle(surface, self.color, c_ball, self.radius)
+    def init_position(self):
+        # Initialize position of the ball
+        init_position = (board.rect.center[0],
+                         (board.rect.center[1] - (base_dimentions[1] / 2) - (ball_dimentions[1] / 2)))
+        return init_position
 
     def deflect(self):
         pass
@@ -141,8 +146,10 @@ def render():
 all_sprites = pygame.sprite.Group()
 board = Base_board()
 brick = Brick()
+ball = Ball()
 all_sprites.add(board)
 all_sprites.add(brick)
+all_sprites.add(ball)
 
 # Game main
 def main():
