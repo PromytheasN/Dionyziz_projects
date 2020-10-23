@@ -9,10 +9,9 @@ import random
 white = (255, 255, 255)
 black = (0, 0, 0)
 orange = (255, 100, 10)
-light_blue = (0, 255, 255)
+light_blue = (0, 144, 255)
 shadow = (192, 192, 192)
 purple = (152, 0, 152)
-light_blue = (0, 0, 255)
 
 # Display
 display_height = 999
@@ -24,8 +23,8 @@ FPS = 60
 left = (-1, 0)
 right = (1, 0)
 up = (0, 1)
-diagonal_left = (-1, 1)
-diagonal_right = (1, 1)
+diagonal_left = [-1, -1]
+diagonal_right = [1, -1]
 
 # Game objects dimentions
 base_dimentions =(display_width // 10, display_height // 100)
@@ -50,11 +49,6 @@ class Brick(pygame.sprite.Sprite):
         # self.p_value = p_value
         # self.str_value = str_value
 
-    def render(self, surface):
-        r_brick = pygame.Rect((self.position[1],
-                                self.position[0]), self.size[0], self.size[1])
-        pygame.draw.rect(surface, self.color, r_brick)
-
     def get_position(self):
         return self.position
 
@@ -74,6 +68,7 @@ class Brick(pygame.sprite.Sprite):
     def location_check(self):
         return self.location in bricks  # List has to be created
 
+
 class Ball(pygame.sprite.Sprite):
     """Initiates a moving ball and its' attributes"""
     
@@ -83,7 +78,6 @@ class Ball(pygame.sprite.Sprite):
         self.image.fill(light_blue)
         self.rect = self.image.get_rect()
         self.rect.center = self.init_position()
-
         self.direction = random.choice([diagonal_left, diagonal_right])
 
     def init_position(self):
@@ -92,8 +86,23 @@ class Ball(pygame.sprite.Sprite):
                          (board.rect.center[1] - (base_dimentions[1] / 2) - (ball_dimentions[1] / 2)))
         return init_position
 
+    def movement(self):
+        self.containment()
+        self.rect[1] += self.direction[1]
+        self.rect[0] += self.direction[0]
+
+    def containment(self):
+        if self.rect.right >= display_width or self.rect.left <= 0:
+            self.direction[0] = -self.direction[0]
+        if self.rect.top <= 0:
+            self.direction[1] = -self.direction[1]
+
+    def update(self):
+        self.movement()
+
     def deflect(self):
         pass
+
 
 class Base_board(pygame.sprite.Sprite):
     """Initiates base_board and it's attributes"""
