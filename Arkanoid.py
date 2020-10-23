@@ -5,32 +5,39 @@ import pygame
 import random
 
 
-# Set colors
+# Set colors R G B
 white = (255, 255, 255)
 black = (0, 0, 0)
 orange = (255, 100, 10)
 light_blue = (0, 255, 255)
 
 # Display
-screen_height = 999
-screen_width = 444
+display_height = int(999)
+display_width = int(444)
 pygame.display.set_caption = ("Arkanoid 1.0")
+FPS = 10
 
 # Movements
 left = (-1, 0)
 right = (1, 0)
+up = (0, 1)
+diagonal_left = (-1, 1)
+diagonal_right = (1, 1)
+
+# Classes dimentions
+base_dimentions =(display_width // 10, display_height // 100)
 
 # Initializing text font
 pygame.font.init()
-txt_font = pygame.font.SysFont("Score: ", screen_height//10)
+txt_font = pygame.font.SysFont("Score: ", display_height//10)
 
-class Bricks():
+class Brick():
 
     def __init__(self, p_value, str_value):
         self.position = (0, 0)
         self.color = orange
         self.random_position()
-        self.size = (screen_width // 20, screen_height // 100)
+        self.size = (display_width // 20, display_height // 100)
         self.p_value = p_value
         self.str_value = str_value
 
@@ -43,10 +50,10 @@ class Bricks():
         return self.position
 
     def random_position(self):
-        self.position = (0, random.randint(screen_width - self.size[1]),
-                         random.randit(0, screen_height // 2))
-        while self.location self.location_check():
-            self.random_position()
+        self.position = (0, random.randint(display_width - self.size[1]),
+                         random.randit(0, display_height // 2))
+        # while self.location self.location_check():
+            # self.random_position()
 
     def reset(self):
         self.position = self.random_position()
@@ -61,8 +68,9 @@ class Ball():
     
     def __init__(self):
         self.position = (0, 0)
-        self.radius = screen_height // 100
+        self.radius = display_height // 100
         self.color = light_blue
+        self.direction = random.choice([diagonal_left, diagonal_right])
 
 
     def render(self, surface):
@@ -70,18 +78,17 @@ class Ball():
                              self.radius * 2, self.radius * 2)
         pygame.draw.circle(surface, self.color, c_ball, self.radius)
 
-    def random_direction(self):
-        
+    def deflect(self):
+        pass
 
-
-class Base_board():
+class Base_board(pygame.sprite.Sprite):
 
     def __init__(self):
-        self.position = (screen_width//2, screen_height) # Have to add something here
-        self.color = orange
-
-    def render(self):
-        pass
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface(base_dimentions)
+        self.image.fill(orange)
+        self.rect = self.image.get_rect()
+        self.rect.center = (display_width // 2, display_height - 2 * base_dimentions[1])
 
     def move(self):
         pass
@@ -104,20 +111,34 @@ def control():
                 base_board.turn(keys_dic[event.key]) # init base_board before
 
 
+def render():
+    pass
+
+# Initializing sprite list and adding all sprites on it
+all_sprites = pygame.sprite.Group()
+board = Base_board()
+all_sprites.add(board)
+
 # Game main
 def main():
     pygame.init()
 
     clock = pygame.time.Clock()
-    screen = pygame.display.set_mode((screen_width, screen_height))
-
-    surface = pygame.Surface(screen.get_size())
-    surface = surface.convert()
+    screen = pygame.display.set_mode((display_width, display_height))
 
     while True:
-        clock.tick(10)
-        screen.fill(white)
+
+        # Events
+        clock.tick(FPS)
         control()
+
+        # Update
+        all_sprites.update()
+
+        # Render
+        screen.fill(white)
+        all_sprites.draw(screen)
+        pygame.display.flip()
         pygame.display.update()
 
 
