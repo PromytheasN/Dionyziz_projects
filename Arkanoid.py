@@ -10,12 +10,15 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 orange = (255, 100, 10)
 light_blue = (0, 255, 255)
+shadow = (192, 192, 192)
+purple = (102, 0, 102)
+light_blue = (0, 0, 255)
 
 # Display
 display_height = int(999)
 display_width = int(444)
 pygame.display.set_caption = ("Arkanoid 1.0")
-FPS = 10
+FPS = 60
 
 # Movements
 left = (-1, 0)
@@ -89,9 +92,16 @@ class Base_board(pygame.sprite.Sprite):
         self.image.fill(orange)
         self.rect = self.image.get_rect()
         self.rect.center = (display_width // 2, display_height - 2 * base_dimentions[1])
+        self.x_direction = 0
 
-    def move(self):
-        pass
+    def update(self):
+        self.x_direction = 0
+        keystate = pygame.key.get_pressed()
+        if keystate[pygame.K_LEFT]:
+            self.x_direction = -3
+        if keystate[pygame.K_RIGHT]:
+            self.x_direction = 3
+        self.rect.x += self.x_direction
 
     def shoot(self):
         pass
@@ -106,9 +116,9 @@ def control():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        elif event.type == pygame.KEYDOWN:
+        """elif event.type == pygame.KEYDOWN:
             if event.key in keys_dic:
-                base_board.turn(keys_dic[event.key]) # init base_board before
+                board.turn(keys_dic[event.key])"""
 
 
 def render():
@@ -136,7 +146,7 @@ def main():
         all_sprites.update()
 
         # Render
-        screen.fill(white)
+        screen.fill(shadow)
         all_sprites.draw(screen)
         pygame.display.flip()
         pygame.display.update()
