@@ -105,8 +105,10 @@ class Ball(pygame.sprite.Sprite):
         self.movement()
 
     def deflect(self):
-        # If hit bricks or base_board
-        if self.rect.bottom == board.rect.top:
+        # If hit base_board
+        if (self.rect.bottom == board.rect.top and
+            (board.rect.left <= self.rect.left <= board.rect.right or
+             board.rect.left <= self.rect.right <= board.rect.right )):
             self.direction[1] *= -1
 
 
