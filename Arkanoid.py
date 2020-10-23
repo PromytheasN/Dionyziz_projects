@@ -19,12 +19,15 @@ display_width = 444
 pygame.display.set_caption = ("Arkanoid 1.0")
 FPS = 60
 
+# Movement speed
+speed = display_width // 60 
+
 # Movements
-left = (-1, 0)
-right = (1, 0)
-up = (0, 1)
-diagonal_left = [-1, -1]
-diagonal_right = [1, -1]
+left = (-speed, 0)
+right = (speed, 0)
+up = (0, speed)
+diagonal_left = [-speed, -speed]
+diagonal_right = [speed, -speed]
 
 # Game objects dimentions
 base_dimentions =(display_width // 10, display_height // 100)
@@ -90,22 +93,25 @@ class Ball(pygame.sprite.Sprite):
         self.containment()
         self.rect[1] += self.direction[1]
         self.rect[0] += self.direction[0]
+        self.deflect()
 
     def containment(self):
         if self.rect.right >= display_width or self.rect.left <= 0:
-            self.direction[0] = -self.direction[0]
+            self.direction[0] *= -1
         if self.rect.top <= 0:
-            self.direction[1] = -self.direction[1]
+            self.direction[1] *= -1
 
     def update(self):
         self.movement()
 
     def deflect(self):
-        pass
+        # If hit bricks or base_board
+        if self.rect.bottom == board.rect.top:
+            self.direction[1] *= -1
 
 
 class Base_board(pygame.sprite.Sprite):
-    """Initiates base_board and it's attributes"""
+    """Initiates base_board class and it's attributes"""
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -126,10 +132,10 @@ class Base_board(pygame.sprite.Sprite):
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_LEFT]:
             if not self.rect.left <= 0:
-                self.x_direction = -(display_width / 148)
+                self.x_direction = -speed
         elif keystate[pygame.K_RIGHT]:
             if not self.rect.right >= display_width:
-                self.x_direction = display_width / 148
+                self.x_direction = speed
 
     def shoot(self):
         pass
