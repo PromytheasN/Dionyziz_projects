@@ -36,7 +36,7 @@ ball_dimentions = (display_height // 100, display_height // 100)
 
 # Initializing text font
 pygame.font.init()
-txt_font = pygame.font.SysFont("Score: ", display_height//10)
+txt_font = pygame.font.SysFont("Score: ", display_height//44)
 
 class Brick(pygame.sprite.Sprite):
 
@@ -67,14 +67,14 @@ class Brick(pygame.sprite.Sprite):
         collision = pygame.sprite.spritecollideany(ball, brick_sprites)
         if collision:
             print("I have colide")
-            self.point_value -= 1
+            self.point_value = self.point_value - 1
             # score += 1
             if self.point_value == 0:
                 self.reset()
 
     def reset(self):
         self.position = self.random_position()
-        self.point_value = 2
+        self.point_value = 1
 
     def get_point_value(self):
         return self.value
@@ -93,6 +93,7 @@ class Ball(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = self.init_position()
         self.direction = random.choice([diagonal_left, diagonal_right])
+        self.score = 0
 
     def init_position(self):
         # Initialize position of the ball
@@ -107,6 +108,7 @@ class Ball(pygame.sprite.Sprite):
         collision = pygame.sprite.spritecollideany(ball, brick_sprites)
         if collision:
             self.direction[1] *= -1
+            self.score += 1
             
 
     def movement(self):
@@ -180,15 +182,22 @@ def control():
 def render():
     pass
 
-# Initializing sprite list and adding all sprites on it
+# Initializing sprite lists and adding all sprites on lists
 all_sprites = pygame.sprite.Group()
 brick_sprites = pygame.sprite.Group()
+
 board = Base_board()
-brick = Brick(2)
+brick = Brick(1)
 ball = Ball()
+
 all_sprites.add(board)
 brick_sprites.add(brick)
 all_sprites.add(ball)
+
+def render_text(screen):
+    text = txt_font.render("Score: {0}".format(ball.score), 1, (0, 0, 0))
+    return screen.blit(text, (5, 10))
+
 
 # Game main
 def main():
@@ -211,6 +220,7 @@ def main():
         screen.fill(shadow)
         all_sprites.draw(screen)
         brick_sprites.draw(screen)
+        render_text(screen)
         pygame.display.flip()
         pygame.display.update()
 
