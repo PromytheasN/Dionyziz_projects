@@ -38,6 +38,10 @@ ball_dimentions = (display_height // 100, display_height // 100)
 pygame.font.init()
 txt_font = pygame.font.SysFont("Score: ", display_height//44)
 
+# Initializing sprite lists 
+all_sprites = pygame.sprite.Group()
+brick_sprites = pygame.sprite.Group()
+
 
 class Brick(pygame.sprite.Sprite):
 
@@ -52,17 +56,13 @@ class Brick(pygame.sprite.Sprite):
 
     def update(self):
         self.collision()
-
-    def get_position(self):
-        return self.position
+        # self.location_check()
 
     def random_position(self):
         self.position = (random.randint(brick_dimentions[0] // 2,
                          display_width - brick_dimentions[0]),
                          random.randint(0, display_height // 2.5))
         return self.position
-        # while self.location self.location_check():
-            # self.random_position()
 
     def collision(self):
         # If brick is hit losing point
@@ -77,17 +77,10 @@ class Brick(pygame.sprite.Sprite):
         self.rect.center = self.random_position()
         self.point_value = 3
 
-    def get_point_value(self):
-        return self.value
-
     def location_check(self):
-        return self.location in bricks  # List has to be created
+        same_loc = pygame.sprite.spritecollideany(self, brick_sprites)
+        return same_loc
 
-# Creating a brick list
-bricks_l = []
-for i in range(10):
-    bricks_l.append(Brick(3))
-print(bricks_l)
 
 
 class Ball(pygame.sprite.Sprite):
@@ -137,7 +130,6 @@ class Ball(pygame.sprite.Sprite):
         if self.rect.bottom >= display_height:
             self.reset()
             brick.reset()
-            print("I have reseted")
 
     def reset(self):
         self.rect.center = self.init_position()
@@ -204,18 +196,22 @@ def control():
             sys.exit()
 
 
-# Initializing sprite lists and adding all sprites on lists
-all_sprites = pygame.sprite.Group()
-brick_sprites = pygame.sprite.Group()
-
+# and adding all sprites on lists
 board = Base_board()
-brick = Brick(3)
 ball = Ball()
+brick = Brick(3)
 
 all_sprites.add(board)
-brick_sprites.add(bricks_l)
 all_sprites.add(ball)
 
+def creation():
+    i = 10
+    while i > 0:
+        brick = Brick(3)
+        if brick.location_check():
+            brick_sprites.add(brick)
+            i -= 1
+    return brick_sprites
 
 def render_text(screen):
     text = txt_font.render("Score: {0}".format(ball.score), 1, (0, 0, 0))
