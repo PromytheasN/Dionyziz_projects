@@ -30,8 +30,8 @@ diagonal_left = [-speed, -speed]
 diagonal_right = [speed, -speed]
 
 # Game objects dimentions
-base_dimentions =(display_width // 10, display_height // 100)
-brick_dimentions = (display_width // 20, display_height // 100)
+base_dimentions =(display_width // 10*5, display_height // 100)
+brick_dimentions = (display_width // 20*5*2, display_height // 100)
 ball_dimentions = (display_height // 100, display_height // 100)
 
 # Initializing text font
@@ -40,17 +40,17 @@ txt_font = pygame.font.SysFont("Score: ", display_height//10)
 
 class Brick(pygame.sprite.Sprite):
 
-    # def __init__(self, p_value, str_value):
-
-    def __init__(self):
+    def __init__(self, point_value):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface(brick_dimentions)
         self.image.fill(purple)
         self.rect = self.image.get_rect()
         self.rect.center = self.random_position()
-
-        # self.p_value = p_value
+        self.point_value = point_value
         # self.str_value = str_value
+
+    def update(self):
+        self.collision()
 
     def get_position(self):
         return self.position
@@ -62,8 +62,19 @@ class Brick(pygame.sprite.Sprite):
         # while self.location self.location_check():
             # self.random_position()
 
+    def collision(self):
+        # If brick is hit losing point
+        collision = pygame.sprite.spritecollideany(ball, brick_sprites)
+        if collision:
+            print("I have colide")
+            self.point_value -= 1
+            # score += 1
+            if self.point_value == 0:
+                self.reset()
+
     def reset(self):
         self.position = self.random_position()
+        self.point_value = 2
 
     def get_point_value(self):
         return self.value
@@ -86,14 +97,24 @@ class Ball(pygame.sprite.Sprite):
     def init_position(self):
         # Initialize position of the ball
         init_position = (board.rect.center[0],
-                         (board.rect.center[1] - (base_dimentions[1] / 2) - (ball_dimentions[1] / 2)))
+                         (board.rect.center[1] - (base_dimentions[1] / 2)
+                          - (ball_dimentions[1] / 2)))
         return init_position
+
+    
+    def collision(self):
+        # If hit bricks
+        collision = pygame.sprite.spritecollideany(ball, brick_sprites)
+        if collision:
+            self.direction[1] *= -1
+            
 
     def movement(self):
         self.containment()
         self.rect[1] += self.direction[1]
         self.rect[0] += self.direction[0]
         self.deflect()
+        self.collision()
 
     def containment(self):
         if self.rect.right >= display_width or self.rect.left <= 0:
@@ -161,11 +182,12 @@ def render():
 
 # Initializing sprite list and adding all sprites on it
 all_sprites = pygame.sprite.Group()
+brick_sprites = pygame.sprite.Group()
 board = Base_board()
-brick = Brick()
+brick = Brick(2)
 ball = Ball()
 all_sprites.add(board)
-all_sprites.add(brick)
+brick_sprites.add(brick)
 all_sprites.add(ball)
 
 # Game main
@@ -182,11 +204,13 @@ def main():
         control()
 
         # Update
+        brick_sprites.update()
         all_sprites.update()
 
         # Render
         screen.fill(shadow)
         all_sprites.draw(screen)
+        brick_sprites.draw(screen)
         pygame.display.flip()
         pygame.display.update()
 
