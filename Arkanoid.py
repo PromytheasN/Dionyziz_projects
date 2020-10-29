@@ -97,7 +97,7 @@ class Ball(pygame.sprite.Sprite):
     def init_position(self):
         # Initialize position of the ball
         init_position = (board.rect.center[0],
-                         (board.rect.center[1] - (base_dimentions[1] / 2)
+                         (board.rect.center[1] - (base_dimentions[1] / 2) 
                           - (ball_dimentions[1] / 2)))
         return init_position
 
@@ -114,8 +114,8 @@ class Ball(pygame.sprite.Sprite):
         self.rect[1] += self.direction[1]
         self.rect[0] += self.direction[0]
         self.deflect()
-        self.collision()
         self.ball_loss()
+        self.collision()
 
     def containment(self):
         if self.rect.right >= display_width or self.rect.left <= 0:
@@ -125,11 +125,12 @@ class Ball(pygame.sprite.Sprite):
 
     def ball_loss(self):
         if self.rect.bottom >= display_height:
-            self.rect.center = self.init_position()
+            self.reset()
             print("I have reseted")
 
     def reset(self):
-        self.init_position()
+        self.rect.center = self.init_position()
+        self.direction[1] *= -1
         self.score = 0
 
     def update(self):
