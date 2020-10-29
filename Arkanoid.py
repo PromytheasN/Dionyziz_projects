@@ -56,7 +56,7 @@ class Brick(pygame.sprite.Sprite):
         return self.position
 
     def random_position(self):
-        self.position = (random.randint(0, display_width - brick_dimentions[1]),
+        self.position = (random.randint(brick_dimentions[0] // 2, display_width - brick_dimentions[0]),
                          random.randint(0, display_height // 2))
         return self.position
         # while self.location self.location_check():
