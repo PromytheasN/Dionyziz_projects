@@ -66,15 +66,17 @@ class Brick(pygame.sprite.Sprite):
         # If brick is hit losing point
         collision = pygame.sprite.spritecollideany(ball, brick_sprites)
         if collision:
-            print("I have colide")
+            print("I have collide")
+            print({self.point_value})
             self.point_value -= 1
+            print({self.point_value})
             # score += 1
             if self.point_value == 0:
                 self.reset()
 
     def reset(self):
-        self.position = self.random_position()
-        self.point_value = 1
+        self.random_position()
+        self.point_value = 5
 
     def get_point_value(self):
         return self.value
@@ -137,7 +139,7 @@ class Ball(pygame.sprite.Sprite):
         self.movement()
 
     def deflect(self):
-        # If hit base_board
+        # If hit base_board, deflect
         if (self.rect.bottom == board.rect.top and
             (board.rect.left <= self.rect.left <= board.rect.right or
              board.rect.left <= self.rect.right <= board.rect.right )):
@@ -204,7 +206,7 @@ all_sprites = pygame.sprite.Group()
 brick_sprites = pygame.sprite.Group()
 
 board = Base_board()
-brick = Brick(1)
+brick = Brick(5)
 ball = Ball()
 
 all_sprites.add(board)
