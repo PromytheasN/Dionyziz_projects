@@ -57,7 +57,7 @@ class Brick(pygame.sprite.Sprite):
 
     def random_position(self):
         self.position = (random.randint(brick_dimentions[0] // 2, display_width - brick_dimentions[0]),
-                         random.randint(0, display_height // 2))
+                         random.randint(0, display_height // 2.5))
         return self.position
         # while self.location self.location_check():
             # self.random_position()
@@ -109,7 +109,6 @@ class Ball(pygame.sprite.Sprite):
         if collision:
             self.direction[1] *= -1
             self.score += 1
-            
 
     def movement(self):
         self.containment()
@@ -142,8 +141,16 @@ class Ball(pygame.sprite.Sprite):
         if (self.rect.bottom == board.rect.top and
             (board.rect.left <= self.rect.left <= board.rect.right or
              board.rect.left <= self.rect.right <= board.rect.right )):
-            self.direction[1] *= -1
+             self.direction[1] *= -1
+             self.board_ball_interaction()
 
+    def board_ball_interaction(self):
+        # When board is moving, effects balls direction/speed
+        keystate = pygame.key.get_pressed()
+        if keystate[pygame.K_LEFT] and board.rect.left > 0:
+            self.direction[0] -= speed // 2
+        elif keystate[pygame.K_RIGHT] and board.rect.right < display_width:
+            self.direction[0] += speed // 2
 
 class Base_board(pygame.sprite.Sprite):
     """Initiates base_board class and it's attributes"""
