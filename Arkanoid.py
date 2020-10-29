@@ -20,7 +20,7 @@ pygame.display.set_caption = ("Arkanoid 1.0")
 FPS = 60
 
 # Movement speed
-speed = display_width // 60 
+speed = display_width // 60
 
 # Movements
 left = (-speed, 0)
@@ -30,13 +30,14 @@ diagonal_left = [-speed, -speed]
 diagonal_right = [speed, -speed]
 
 # Game objects dimentions
-base_dimentions =(display_width // 10*5, display_height // 100)
-brick_dimentions = (display_width // 20*5*2, display_height // 100)
+base_dimentions = (display_width // 10 * 5, display_height // 100)
+brick_dimentions = (display_width // 20 * 5, display_height // 100)
 ball_dimentions = (display_height // 100, display_height // 100)
 
 # Initializing text font
 pygame.font.init()
 txt_font = pygame.font.SysFont("Score: ", display_height//44)
+
 
 class Brick(pygame.sprite.Sprite):
 
@@ -56,7 +57,8 @@ class Brick(pygame.sprite.Sprite):
         return self.position
 
     def random_position(self):
-        self.position = (random.randint(brick_dimentions[0] // 2, display_width - brick_dimentions[0]),
+        self.position = (random.randint(brick_dimentions[0] // 2,
+                         display_width - brick_dimentions[0]),
                          random.randint(0, display_height // 2.5))
         return self.position
         # while self.location self.location_check():
@@ -84,7 +86,7 @@ class Brick(pygame.sprite.Sprite):
 
 class Ball(pygame.sprite.Sprite):
     """Initiates a moving ball and its' attributes"""
-    
+
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface(ball_dimentions)
@@ -94,14 +96,16 @@ class Ball(pygame.sprite.Sprite):
         self.direction = random.choice([diagonal_left, diagonal_right])
         self.score = 0
 
+    def update(self):
+        self.movement()
+
     def init_position(self):
         # Initialize position of the ball
         init_position = (board.rect.center[0],
-                         (board.rect.center[1] - (base_dimentions[1] / 2) 
+                         (board.rect.center[1] - (base_dimentions[1] / 2)
                           - (ball_dimentions[1] / 2)))
         return init_position
 
-    
     def collision(self):
         # If hit bricks
         collision = pygame.sprite.spritecollideany(ball, brick_sprites)
@@ -133,16 +137,13 @@ class Ball(pygame.sprite.Sprite):
         self.direction[1] *= -1
         self.score = 0
 
-    def update(self):
-        self.movement()
-
     def deflect(self):
         # If hit base_board, deflect
         if (self.rect.bottom == board.rect.top and
             (board.rect.left <= self.rect.left <= board.rect.right or
-             board.rect.left <= self.rect.right <= board.rect.right )):
-             self.direction[1] *= -1
-             self.board_ball_interaction()
+             board.rect.left <= self.rect.right <= board.rect.right)):
+            self.direction[1] *= -1
+            self.board_ball_interaction()
 
     def board_ball_interaction(self):
         # When board is moving, effects balls direction/speed
@@ -152,6 +153,7 @@ class Ball(pygame.sprite.Sprite):
         elif keystate[pygame.K_RIGHT] and board.rect.right < display_width:
             self.direction[0] += speed // 2
 
+
 class Base_board(pygame.sprite.Sprite):
     """Initiates base_board class and it's attributes"""
 
@@ -160,7 +162,8 @@ class Base_board(pygame.sprite.Sprite):
         self.image = pygame.Surface(base_dimentions)
         self.image.fill(orange)
         self.rect = self.image.get_rect()
-        self.rect.center = (display_width // 2, display_height - 2 * base_dimentions[1])
+        self.rect.center = (display_width // 2,
+                            display_height - 2 * base_dimentions[1])
         self.x_direction = 0
 
     def update(self):
@@ -185,19 +188,14 @@ class Base_board(pygame.sprite.Sprite):
     def enlogate(self):
         pass
 
+
 def control():
-    keys_dic = {pygame.K_LEFT: left, pygame.K_RIGHT: right}
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        """elif event.type == pygame.KEYDOWN:
-            if event.key in keys_dic:
-                board.turn(keys_dic[event.key])"""
 
-def render():
-    pass
 
 # Initializing sprite lists and adding all sprites on lists
 all_sprites = pygame.sprite.Group()
