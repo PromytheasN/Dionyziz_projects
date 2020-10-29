@@ -67,7 +67,7 @@ class Brick(pygame.sprite.Sprite):
         collision = pygame.sprite.spritecollideany(ball, brick_sprites)
         if collision:
             print("I have colide")
-            self.point_value = self.point_value - 1
+            self.point_value -= 1
             # score += 1
             if self.point_value == 0:
                 self.reset()
@@ -117,12 +117,22 @@ class Ball(pygame.sprite.Sprite):
         self.rect[0] += self.direction[0]
         self.deflect()
         self.collision()
+        self.ball_loss()
 
     def containment(self):
         if self.rect.right >= display_width or self.rect.left <= 0:
             self.direction[0] *= -1
         if self.rect.top <= 0:
             self.direction[1] *= -1
+
+    def ball_loss(self):
+        if self.rect.bottom >= display_height:
+            self.reset()
+            print("I have reseted")
+
+    def reset(self):
+        self.init_position()
+        self.score = 0
 
     def update(self):
         self.movement()
