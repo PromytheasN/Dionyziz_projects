@@ -17,7 +17,7 @@ purple = (152, 0, 152)
 display_height = 999
 display_width = 444
 pygame.display.set_caption = ("Arkanoid 1.0")
-FPS = 60
+FPS = 30
 
 # Movement speed
 speed = display_width // 60
@@ -83,6 +83,12 @@ class Brick(pygame.sprite.Sprite):
     def location_check(self):
         return self.location in bricks  # List has to be created
 
+# Creating a brick list
+bricks_l = []
+for i in range(10):
+    bricks_l.append(Brick(3))
+print(bricks_l)
+
 
 class Ball(pygame.sprite.Sprite):
     """Initiates a moving ball and its' attributes"""
@@ -130,6 +136,7 @@ class Ball(pygame.sprite.Sprite):
     def ball_loss(self):
         if self.rect.bottom >= display_height:
             self.reset()
+            brick.reset()
             print("I have reseted")
 
     def reset(self):
@@ -206,12 +213,18 @@ brick = Brick(3)
 ball = Ball()
 
 all_sprites.add(board)
-brick_sprites.add(brick)
+brick_sprites.add(bricks_l)
 all_sprites.add(ball)
+
 
 def render_text(screen):
     text = txt_font.render("Score: {0}".format(ball.score), 1, (0, 0, 0))
     return screen.blit(text, (5, 10))
+
+def render_main(screen):
+    all_sprites.draw(screen)
+    brick_sprites.draw(screen)
+    render_text(screen)
 
 
 # Game main
@@ -233,9 +246,7 @@ def main():
 
         # Render
         screen.fill(shadow)
-        all_sprites.draw(screen)
-        brick_sprites.draw(screen)
-        render_text(screen)
+        render_main(screen)
         pygame.display.flip()
         pygame.display.update()
 
