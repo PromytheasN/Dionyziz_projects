@@ -66,17 +66,14 @@ class Brick(pygame.sprite.Sprite):
         # If brick is hit losing point
         collision = pygame.sprite.spritecollideany(ball, brick_sprites)
         if collision:
-            print("I have collide")
-            print({self.point_value})
             self.point_value -= 1
-            print({self.point_value})
             # score += 1
             if self.point_value == 0:
                 self.reset()
 
     def reset(self):
-        self.random_position()
-        self.point_value = 5
+        self.rect.center = self.random_position()
+        self.point_value = 3
 
     def get_point_value(self):
         return self.value
@@ -128,7 +125,7 @@ class Ball(pygame.sprite.Sprite):
 
     def ball_loss(self):
         if self.rect.bottom >= display_height:
-            self.reset()
+            self.rect.center = self.init_position()
             print("I have reseted")
 
     def reset(self):
@@ -206,7 +203,7 @@ all_sprites = pygame.sprite.Group()
 brick_sprites = pygame.sprite.Group()
 
 board = Base_board()
-brick = Brick(5)
+brick = Brick(3)
 ball = Ball()
 
 all_sprites.add(board)
