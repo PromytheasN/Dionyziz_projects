@@ -31,14 +31,15 @@ diagonal_right = [speed, -speed]
 
 # Game objects dimentions
 base_dimentions = (display_width // 5, display_height // 100)
-brick_dimentions = [brick_width, brick_height] = [display_width // 20 * 2, display_height // 100]
+[brick_width, brick_height] = [display_width // 20 * 2, display_height // 100]
+brick_dimentions = [brick_width, brick_height] 
 ball_dimentions = (display_height // 100, display_height // 100)
 
 # Initializing text font
 pygame.font.init()
 txt_font = pygame.font.SysFont("Score: ", display_height//44)
 
-# Initializing sprite lists 
+# Initializing sprite lists
 all_sprites = pygame.sprite.Group()
 brick_sprites = pygame.sprite.Group()
 
@@ -59,6 +60,7 @@ class Brick(pygame.sprite.Sprite):
     def collision(self):
         # If brick is hit, loses a point
         collision = pygame.sprite.spritecollide(ball, brick_sprites, True)
+        return collision
 
 
 class Ball(pygame.sprite.Sprite):
@@ -181,11 +183,11 @@ ball = Ball()
 all_sprites.add(board)
 all_sprites.add(ball)
 
+
 def bricks_list_creator():
     # Creates and adds bricks into a list
     i = 9
-    # point_value = 3
-    coordinates = [display_width // 20 + brick_width / 6, display_height// 20]
+    coordinates = [display_width // 20 + brick_width / 6, display_height // 20]
     while i > 0:
         brick = Brick((coordinates))
         coordinates[0] += brick_width * 1.1
@@ -193,15 +195,18 @@ def bricks_list_creator():
         i -= 1
     return brick_sprites
 
+
 def bricks_reset():
     # Reset brick list
     brick_sprites.empty()
     bricks_list_creator()
     return brick_sprites
 
+
 def render_text(screen):
     text = txt_font.render("Score: {0}".format(ball.score), 1, (0, 0, 0))
     return screen.blit(text, (5, 10))
+
 
 def render_main(screen):
     all_sprites.draw(screen)
