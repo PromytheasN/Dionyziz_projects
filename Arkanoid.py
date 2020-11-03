@@ -30,8 +30,8 @@ diagonal_left = [-speed, -speed]
 diagonal_right = [speed, -speed]
 
 # Game objects dimentions
-base_dimentions = (display_width // 10 * 5, display_height // 100)
-brick_dimentions = (brick_width, brick_height) = (display_width // 20 * 5, display_height // 100)
+base_dimentions = (display_width // 10 * 2, display_height // 100)
+brick_dimentions = [brick_width, brick_height] = [display_width // 20 * 2, display_height // 100]
 ball_dimentions = (display_height // 100, display_height // 100)
 
 # Initializing text font
@@ -61,7 +61,6 @@ class Brick(pygame.sprite.Sprite):
         collision = pygame.sprite.spritecollideany(ball, brick_sprites)
         if collision:
             self.point_value -= 1
-            #score += 1
             if self.point_value == 0:
                 self.kill()
 
@@ -112,7 +111,7 @@ class Ball(pygame.sprite.Sprite):
     def ball_loss(self):
         if self.rect.bottom >= display_height:
             self.reset()
-            # brick.reset()
+            bricks_reset()
 
     def reset(self):
         self.rect.center = self.init_position()
@@ -182,19 +181,27 @@ def control():
 # and adding all sprites on lists
 board = Base_board()
 ball = Ball()
-brick = Brick(3, (20, 50))
+# brick = Brick(3, (20, 50))
 
 all_sprites.add(board)
 all_sprites.add(ball)
-brick_sprites.add(brick)
 
-def bricks_list_creator(): # Needs to be changed ##
+def bricks_list_creator():
+    # Creates and adds bricks into a list
     i = 10
-    coordinates = (20, 50)
+    point_value = 3
+    coordinates = [display_width // 20, display_height// 20]
     while i > 0:
-        brick = Brick(3, (coordinates))
-        #coordinates += 
+        brick = Brick(point_value, (coordinates))
+        coordinates[0] += brick_width
+        brick_sprites.add(brick)
         i -= 1
+    return brick_sprites
+
+def bricks_reset():
+    # Reset brick list
+    brick_sprites.empty()
+    bricks_list_creator()
     return brick_sprites
 
 def render_text(screen):
@@ -213,6 +220,7 @@ def main():
 
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((display_width, display_height))
+    bricks_list_creator()
 
     while True:
 
