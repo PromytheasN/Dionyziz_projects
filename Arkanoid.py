@@ -181,19 +181,18 @@ def control():
 # and adding all sprites on lists
 board = Base_board()
 ball = Ball()
-# brick = Brick(3, (20, 50))
 
 all_sprites.add(board)
 all_sprites.add(ball)
 
 def bricks_list_creator():
     # Creates and adds bricks into a list
-    i = 10
+    i = 9
     point_value = 3
-    coordinates = [display_width // 20, display_height// 20]
+    coordinates = [display_width // 20 + brick_width / 6, display_height// 20]
     while i > 0:
         brick = Brick(point_value, (coordinates))
-        coordinates[0] += brick_width
+        coordinates[0] += brick_width * 1.1
         brick_sprites.add(brick)
         i -= 1
     return brick_sprites
