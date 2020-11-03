@@ -62,7 +62,8 @@ class Brick(pygame.sprite.Sprite):
         if collision:
             self.point_value -= 1
             if self.point_value == 0:
-                self.kill()
+                self.kill() ## BUGGISH ##
+                print("The total sprites are:", brick_sprites)
 
 
 class Ball(pygame.sprite.Sprite):
