@@ -30,7 +30,7 @@ diagonal_left = [-speed, -speed]
 diagonal_right = [speed, -speed]
 
 # Game objects dimentions
-base_dimentions = (display_width // 10 * 10, display_height // 100)
+base_dimentions = (display_width // 5, display_height // 100)
 brick_dimentions = [brick_width, brick_height] = [display_width // 20 * 2, display_height // 100]
 ball_dimentions = (display_height // 100, display_height // 100)
 
@@ -45,13 +45,13 @@ brick_sprites = pygame.sprite.Group()
 
 class Brick(pygame.sprite.Sprite):
 
-    def __init__(self, point_value, center):
+    def __init__(self, center):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface(brick_dimentions)
         self.image.fill(purple)
         self.rect = self.image.get_rect()
         self.rect.center = center
-        self.point_value = point_value
+        # self.point_value = point_value
 
     def update(self):
         self.collision()
@@ -59,12 +59,6 @@ class Brick(pygame.sprite.Sprite):
     def collision(self):
         # If brick is hit, loses a point
         collision = pygame.sprite.spritecollide(ball, brick_sprites, True)
-        if collision:
-            self.point_value -= 1
-            #print("the self point value of this brick is: ", self.point_value)
-            #if self.point_value == 0:
-                #self.kill() ## BUGGISH ##
-                # It minuses from all bricks while are created.
 
 
 class Ball(pygame.sprite.Sprite):
@@ -190,10 +184,10 @@ all_sprites.add(ball)
 def bricks_list_creator():
     # Creates and adds bricks into a list
     i = 9
-    point_value = 3
+    # point_value = 3
     coordinates = [display_width // 20 + brick_width / 6, display_height// 20]
     while i > 0:
-        brick = Brick(point_value, (coordinates))
+        brick = Brick((coordinates))
         coordinates[0] += brick_width * 1.1
         brick_sprites.add(brick)
         i -= 1
