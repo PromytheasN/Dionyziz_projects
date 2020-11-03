@@ -17,7 +17,7 @@ purple = (152, 0, 152)
 display_height = 999
 display_width = 444
 pygame.display.set_caption = ("Arkanoid 1.0")
-FPS = 30
+FPS = 60
 
 # Movement speed
 speed = display_width // 60
@@ -31,7 +31,7 @@ diagonal_right = [speed, -speed]
 
 # Game objects dimentions
 base_dimentions = (display_width // 10 * 5, display_height // 100)
-brick_dimentions = (display_width // 20 * 5, display_height // 100)
+brick_dimentions = (brick_width, brick_height) = (display_width // 20 * 5, display_height // 100)
 ball_dimentions = (display_height // 100, display_height // 100)
 
 # Initializing text font
@@ -45,42 +45,25 @@ brick_sprites = pygame.sprite.Group()
 
 class Brick(pygame.sprite.Sprite):
 
-    def __init__(self, point_value):
+    def __init__(self, point_value, center):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface(brick_dimentions)
         self.image.fill(purple)
         self.rect = self.image.get_rect()
-        self.rect.center = self.random_position()
+        self.rect.center = center
         self.point_value = point_value
-        # self.str_value = str_value
 
     def update(self):
         self.collision()
-        # self.location_check()
-
-    def random_position(self):
-        self.position = (random.randint(brick_dimentions[0] // 2,
-                         display_width - brick_dimentions[0]),
-                         random.randint(0, display_height // 2.5))
-        return self.position
 
     def collision(self):
         # If brick is hit losing point
         collision = pygame.sprite.spritecollideany(ball, brick_sprites)
         if collision:
             self.point_value -= 1
-            # score += 1
+            #score += 1
             if self.point_value == 0:
-                self.reset()
-
-    def reset(self):
-        self.rect.center = self.random_position()
-        self.point_value = 3
-
-    def location_check(self):
-        same_loc = pygame.sprite.spritecollideany(self, brick_sprites)
-        return same_loc
-
+                self.kill()
 
 
 class Ball(pygame.sprite.Sprite):
@@ -129,7 +112,7 @@ class Ball(pygame.sprite.Sprite):
     def ball_loss(self):
         if self.rect.bottom >= display_height:
             self.reset()
-            brick.reset()
+            # brick.reset()
 
     def reset(self):
         self.rect.center = self.init_position()
@@ -199,18 +182,19 @@ def control():
 # and adding all sprites on lists
 board = Base_board()
 ball = Ball()
-brick = Brick(3)
+brick = Brick(3, (20, 50))
 
 all_sprites.add(board)
 all_sprites.add(ball)
+brick_sprites.add(brick)
 
-def creation():
+def bricks_list_creator(): # Needs to be changed ##
     i = 10
+    coordinates = (20, 50)
     while i > 0:
-        brick = Brick(3)
-        if brick.location_check():
-            brick_sprites.add(brick)
-            i -= 1
+        brick = Brick(3, (coordinates))
+        #coordinates += 
+        i -= 1
     return brick_sprites
 
 def render_text(screen):
