@@ -40,28 +40,32 @@ pygame.font.init()
 txt_font = pygame.font.SysFont("Score: ", display_height//44)
 
 # Initializing sprite lists
-all_sprites = pygame.sprite.Group()
+ball_board_sprites = pygame.sprite.Group()
 brick_sprites = pygame.sprite.Group()
 
 
 class Brick(pygame.sprite.Sprite):
 
-    def __init__(self, center):
+    def __init__(self, point_value, center):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface(brick_dimentions)
         self.image.fill(purple)
         self.rect = self.image.get_rect()
         self.rect.center = center
-        # self.point_value = point_value
+        self.point_value = point_value
 
     def update(self):
         self.collision()
 
-    def collision(self):
+    def collision(self): #Here is the issue.
         # If brick is hit, loses a point
-        collision = pygame.sprite.spritecollide(ball, brick_sprites, True)
-        return collision
-
+        brick_list = pygame.sprite.Group()
+        brick_list.add(self)
+        collision = pygame.sprite.spritecollide(ball, brick_list, False)
+        if collision:
+            self.point_value -= 1
+            if self.point_value == 0:
+                self.kill() 
 
 class Ball(pygame.sprite.Sprite):
     """Initiates a moving ball and its' attributes"""
@@ -180,16 +184,17 @@ def control():
 board = Base_board()
 ball = Ball()
 
-all_sprites.add(board)
-all_sprites.add(ball)
+ball_board_sprites.add(board)
+ball_board_sprites.add(ball)
 
 
 def bricks_list_creator():
     # Creates and adds bricks into a list
     i = 9
+    point_value = 3
     coordinates = [display_width // 20 + brick_width / 6, display_height // 20]
     while i > 0:
-        brick = Brick((coordinates))
+        brick = Brick(point_value, (coordinates))
         coordinates[0] += brick_width * 1.1
         brick_sprites.add(brick)
         i -= 1
@@ -209,7 +214,7 @@ def render_text(screen):
 
 
 def render_main(screen):
-    all_sprites.draw(screen)
+    ball_board_sprites.draw(screen)
     brick_sprites.draw(screen)
     render_text(screen)
 
@@ -230,7 +235,7 @@ def main():
 
         # Update
         brick_sprites.update()
-        all_sprites.update()
+        ball_board_sprites.update()
 
         # Render
         screen.fill(shadow)
