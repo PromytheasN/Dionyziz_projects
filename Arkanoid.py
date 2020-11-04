@@ -145,12 +145,6 @@ class Base_board(pygame.sprite.Sprite):
         self.movement()
         self.rect.x += self.x_direction
 
-        list_of_collisions = pygame.sprite.spritecollide(ball, brick_sprites, False)
-        if list_of_collisions:
-            ball.collision()
-            for instance in list_of_collisions:
-                instance.collision()
-
     def movement(self):
         # Creates movement and constrains object within screen dimentions
         keystate = pygame.key.get_pressed()
@@ -214,6 +208,12 @@ def render_main(screen):
     brick_sprites.draw(screen)
     render_text(screen)
 
+def update_collisions:
+    list_of_collisions = pygame.sprite.spritecollide(ball, brick_sprites, False)
+        if list_of_collisions:
+            ball.collision()
+            for instance in list_of_collisions:
+                instance.collision()
 
 # Game main
 def main():
@@ -227,6 +227,7 @@ def main():
         # Events
         clock.tick(FPS)
         control()
+        update_collisions()
 
         # Update
         ball_board_sprites.update()
