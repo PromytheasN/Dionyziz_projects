@@ -208,12 +208,12 @@ def render_main(screen):
     brick_sprites.draw(screen)
     render_text(screen)
 
-def update_collisions:
+def update_collisions():
     list_of_collisions = pygame.sprite.spritecollide(ball, brick_sprites, False)
-        if list_of_collisions:
-            ball.collision()
-            for instance in list_of_collisions:
-                instance.collision()
+    if list_of_collisions:
+        ball.collision()
+        for instance in list_of_collisions:
+            instance.collision()
 
 # Game main
 def main():
