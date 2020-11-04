@@ -30,8 +30,9 @@ diagonal_left = [-speed, -speed]
 diagonal_right = [speed, -speed]
 
 # Game objects dimentions
-base_dimentions = (display_width // 5, display_height // 100)
-[brick_width, brick_height] = [display_width // 20 * 2, display_height // 100]
+base_dimentions = (display_width // 1, display_height // 100)
+brick_width = display_width // 20 * 2
+brick_height = display_height // 100
 brick_dimentions = [brick_width, brick_height] 
 ball_dimentions = (display_height // 100, display_height // 100)
 
@@ -54,18 +55,10 @@ class Brick(pygame.sprite.Sprite):
         self.rect.center = center
         self.point_value = point_value
 
-    def update(self):
-        self.collision()
-
-    def collision(self): #Here is the issue.
-        # If brick is hit, loses a point
-        brick_list = pygame.sprite.Group()
-        brick_list.add(self)
-        collision = pygame.sprite.spritecollide(ball, brick_list, False)
-        if collision:
-            self.point_value -= 1
-            if self.point_value == 0:
-                self.kill() 
+    def collision(self):
+        self.point_value -= 1
+        if self.point_value == 0:
+            self.kill() 
 
 class Ball(pygame.sprite.Sprite):
     """Initiates a moving ball and its' attributes"""
@@ -91,10 +84,8 @@ class Ball(pygame.sprite.Sprite):
 
     def collision(self):
         # If hit bricks
-        collision = pygame.sprite.spritecollideany(ball, brick_sprites)
-        if collision:
-            self.direction[1] *= -1
-            self.score += 1
+        self.direction[1] *= -1
+        self.score += 1
 
     def movement(self):
         self.containment()
@@ -102,7 +93,6 @@ class Ball(pygame.sprite.Sprite):
         self.rect[0] += self.direction[0]
         self.deflect()
         self.ball_loss()
-        self.collision()
 
     def containment(self):
         if self.rect.right >= display_width or self.rect.left <= 0:
@@ -154,6 +144,12 @@ class Base_board(pygame.sprite.Sprite):
         self.x_direction = 0
         self.movement()
         self.rect.x += self.x_direction
+
+        list_of_collisions = pygame.sprite.spritecollide(ball, brick_sprites, False)
+        if list_of_collisions:
+            ball.collision()
+            for instance in list_of_collisions:
+                instance.collision()
 
     def movement(self):
         # Creates movement and constrains object within screen dimentions
@@ -228,13 +224,11 @@ def main():
     bricks_list_creator()
 
     while True:
-
         # Events
         clock.tick(FPS)
         control()
 
         # Update
-        brick_sprites.update()
         ball_board_sprites.update()
 
         # Render
