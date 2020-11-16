@@ -3,8 +3,8 @@
 import sys
 import pygame
 import random
-from arkanoid import settings
-
+import arkanoid.settings
+import arkanoid.brick
 
 # Initializing text font
 pygame.font.init()
@@ -15,7 +15,7 @@ ball_paddle_sprites = pygame.sprite.Group()
 brick_sprites = pygame.sprite.Group()
 
 
-class Brick(pygame.sprite.Sprite):
+"""class Brick(pygame.sprite.Sprite):
 
     def __init__(self, point_value, center):
         pygame.sprite.Sprite.__init__(self)
@@ -28,7 +28,7 @@ class Brick(pygame.sprite.Sprite):
     def collide(self):
         self.point_value -= 1
         if self.point_value == 0:
-            self.kill() 
+            self.kill() """
 
 class Ball(pygame.sprite.Sprite):
     """Initiates a moving ball and its' attributes"""
