@@ -55,7 +55,7 @@ class Brick(pygame.sprite.Sprite):
         self.rect.center = center
         self.point_value = point_value
 
-    def collision(self):
+    def collide(self):
         self.point_value -= 1
         if self.point_value == 0:
             self.kill() 
@@ -73,7 +73,7 @@ class Ball(pygame.sprite.Sprite):
         self.score = 0
 
     def update(self):
-        self.movement()
+        self.move()
 
     def init_position(self):
         # Initialize position of the ball
@@ -82,12 +82,12 @@ class Ball(pygame.sprite.Sprite):
                           - (ball_dimentions[1] / 2)))
         return init_position
 
-    def collision(self):
+    def collide(self):
         # If hit bricks
         self.direction[1] *= -1
         self.score += 1
 
-    def movement(self):
+    def move(self):
         self.containment()
         self.rect[1] += self.direction[1]
         self.rect[0] += self.direction[0]
@@ -103,7 +103,7 @@ class Ball(pygame.sprite.Sprite):
     def ball_loss(self):
         if self.rect.bottom >= display_height:
             self.reset()
-            bricks_reset()
+            reset_bricks()
 
     def reset(self):
         self.rect.center = self.init_position()
@@ -111,14 +111,15 @@ class Ball(pygame.sprite.Sprite):
         self.score = 0
 
     def deflect(self):
-        # If hit base_board, deflect
+        # If hit Board, deflect
         if (self.rect.bottom == board.rect.top and
             (board.rect.left <= self.rect.left <= board.rect.right or
              board.rect.left <= self.rect.right <= board.rect.right)):
             self.direction[1] *= -1
-            self.board_ball_interaction()
+            self.interact_ball_board
+    ()
 
-    def board_ball_interaction(self):
+    def interact_ball_board(self):
         # When board is moving, effects balls direction/speed
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_LEFT] and board.rect.left > 0:
@@ -127,8 +128,8 @@ class Ball(pygame.sprite.Sprite):
             self.direction[0] += speed // 2
 
 
-class Base_board(pygame.sprite.Sprite):
-    """Initiates base_board class and it's attributes"""
+class Board(pygame.sprite.Sprite):
+    """Initiates Board class and it's attributes"""
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -142,10 +143,10 @@ class Base_board(pygame.sprite.Sprite):
     def update(self):
         # Up-dates classes' position according to user's imput
         self.x_direction = 0
-        self.movement()
+        self.move()
         self.rect.x += self.x_direction
 
-    def movement(self):
+    def move(self):
         # Creates movement and constrains object within screen dimentions
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_LEFT]:
@@ -171,14 +172,14 @@ def control():
 
 
 # and adding all sprites on lists
-board = Base_board()
+board = Board()
 ball = Ball()
 
 ball_board_sprites.add(board)
 ball_board_sprites.add(ball)
 
 
-def bricks_list_creator():
+def create_brick_list():
     # Creates and adds bricks into a list
     i = 9
     point_value = 3
@@ -191,10 +192,10 @@ def bricks_list_creator():
     return brick_sprites
 
 
-def bricks_reset():
+def reset_bricks():
     # Reset brick list
     brick_sprites.empty()
-    bricks_list_creator()
+    create_brick_list()
     return brick_sprites
 
 
@@ -211,9 +212,9 @@ def render_main(screen):
 def update_collisions():
     list_of_collisions = pygame.sprite.spritecollide(ball, brick_sprites, False)
     if list_of_collisions:
-        ball.collision()
+        ball.collide()
         for instance in list_of_collisions:
-            instance.collision()
+            instance.collide()
 
 # Game main
 def main():
@@ -221,7 +222,7 @@ def main():
 
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((display_width, display_height))
-    bricks_list_creator()
+    create_brick_list()
 
     while True:
         # Events
@@ -233,10 +234,10 @@ def main():
         ball_board_sprites.update()
 
         # Render
-        screen.fill(shadow)
         render_main(screen)
         pygame.display.flip()
         pygame.display.update()
+        screen.fill(shadow)
 
 
 main()
