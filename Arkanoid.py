@@ -30,7 +30,7 @@ diagonal_left = [-speed, -speed]
 diagonal_right = [speed, -speed]
 
 # Game objects dimentions
-base_dimentions = (display_width // 1, display_height // 100)
+paddle_dimentions = (display_width // 2, display_height // 100)
 brick_width = display_width // 20 * 2
 brick_height = display_height // 100
 brick_dimentions = [brick_width, brick_height] 
@@ -41,7 +41,7 @@ pygame.font.init()
 txt_font = pygame.font.SysFont("Score: ", display_height//44)
 
 # Initializing sprite lists
-ball_Paddle_sprites = pygame.sprite.Group()
+ball_paddle_sprites = pygame.sprite.Group()
 brick_sprites = pygame.sprite.Group()
 
 
@@ -77,8 +77,8 @@ class Ball(pygame.sprite.Sprite):
 
     def init_position(self):
         # Initialize position of the ball
-        init_position = (Paddle.rect.center[0],
-                         (Paddle.rect.center[1] - (base_dimentions[1] / 2)
+        init_position = (paddle.rect.center[0],
+                         (paddle.rect.center[1] - (paddle_dimentions[1] / 2)
                           - (ball_dimentions[1] / 2)))
         return init_position
 
@@ -112,32 +112,32 @@ class Ball(pygame.sprite.Sprite):
 
     def deflect(self):
         # If hit Paddle, deflect
-        if (self.rect.bottom == Paddle.rect.top and
-            (Paddle.rect.left <= self.rect.left <= Paddle.rect.right or
-             Paddle.rect.left <= self.rect.right <= Paddle.rect.right)):
+        if (self.rect.bottom == paddle.rect.top and
+            (paddle.rect.left <= self.rect.left <= paddle.rect.right or
+             paddle.rect.left <= self.rect.right <= paddle.rect.right)):
             self.direction[1] *= -1
-            self.interact_ball_Paddle
-    ()
+            self.interact_ball_paddle()
 
-    def interact_ball_Paddle(self):
+
+    def interact_ball_paddle(self):
         # When Paddle is moving, effects balls direction/speed
         keystate = pygame.key.get_pressed()
-        if keystate[pygame.K_LEFT] and Paddle.rect.left > 0:
+        if keystate[pygame.K_LEFT] and paddle.rect.left > 0:
             self.direction[0] -= speed // 2
-        elif keystate[pygame.K_RIGHT] and Paddle.rect.right < display_width:
+        elif keystate[pygame.K_RIGHT] and paddle.rect.right < display_width:
             self.direction[0] += speed // 2
 
 
 class Paddle(pygame.sprite.Sprite):
-    """Initiates Paddle class and it's attributes"""
+    """Initiates paddle class and it's attributes"""
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface(base_dimentions)
+        self.image = pygame.Surface(paddle_dimentions)
         self.image.fill(orange)
         self.rect = self.image.get_rect()
         self.rect.center = (display_width // 2,
-                            display_height - 2 * base_dimentions[1])
+                            display_height - 2 * paddle_dimentions[1])
         self.x_direction = 0
 
     def update(self):
@@ -150,10 +150,10 @@ class Paddle(pygame.sprite.Sprite):
         # Creates movement and constrains object within screen dimentions
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_LEFT]:
-            if not self.rect.left <= 0:
+            if self.rect.left > 0:
                 self.x_direction = -speed
         elif keystate[pygame.K_RIGHT]:
-            if not self.rect.right >= display_width:
+            if self.rect.right < display_width:
                 self.x_direction = speed
 
     def shoot(self):
@@ -172,11 +172,11 @@ def control():
 
 
 # and adding all sprites on lists
-Paddle = Paddle()
+paddle = Paddle()
 ball = Ball()
 
-ball_Paddle_sprites.add(Paddle)
-ball_Paddle_sprites.add(ball)
+ball_paddle_sprites.add(paddle)
+ball_paddle_sprites.add(ball)
 
 
 def create_brick_list():
@@ -205,7 +205,7 @@ def render_text(screen):
 
 
 def render_main(screen):
-    ball_Paddle_sprites.draw(screen)
+    ball_paddle_sprites.draw(screen)
     brick_sprites.draw(screen)
     render_text(screen)
 
@@ -231,7 +231,7 @@ def main():
         update_collisions()
 
         # Update
-        ball_Paddle_sprites.update()
+        ball_paddle_sprites.update()
 
         # Render
         render_main(screen)
