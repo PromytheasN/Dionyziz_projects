@@ -30,5 +30,3 @@ brick_width = display_width // 20 * 2
 brick_height = display_height // 100
 brick_dimentions = [brick_width, brick_height] 
 ball_dimentions = (display_height // 100, display_height // 100)
-
-print("settings are ok!")

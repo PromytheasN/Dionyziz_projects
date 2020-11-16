@@ -3,9 +3,10 @@
 import sys
 import pygame
 import random
+from arkanoid import settings
 
 
-# Set colors R G B
+"""# Set colors R G B
 white = (255, 255, 255)
 black = (0, 0, 0)
 orange = (255, 100, 10)
@@ -34,7 +35,7 @@ paddle_dimentions = (display_width // 2, display_height // 100)
 brick_width = display_width // 20 * 2
 brick_height = display_height // 100
 brick_dimentions = [brick_width, brick_height] 
-ball_dimentions = (display_height // 100, display_height // 100)
+ball_dimentions = (display_height // 100, display_height // 100)"""
 
 # Initializing text font
 pygame.font.init()
