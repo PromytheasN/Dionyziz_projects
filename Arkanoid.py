@@ -41,7 +41,7 @@ pygame.font.init()
 txt_font = pygame.font.SysFont("Score: ", display_height//44)
 
 # Initializing sprite lists
-ball_board_sprites = pygame.sprite.Group()
+ball_Paddle_sprites = pygame.sprite.Group()
 brick_sprites = pygame.sprite.Group()
 
 
@@ -77,8 +77,8 @@ class Ball(pygame.sprite.Sprite):
 
     def init_position(self):
         # Initialize position of the ball
-        init_position = (board.rect.center[0],
-                         (board.rect.center[1] - (base_dimentions[1] / 2)
+        init_position = (Paddle.rect.center[0],
+                         (Paddle.rect.center[1] - (base_dimentions[1] / 2)
                           - (ball_dimentions[1] / 2)))
         return init_position
 
@@ -111,25 +111,25 @@ class Ball(pygame.sprite.Sprite):
         self.score = 0
 
     def deflect(self):
-        # If hit Board, deflect
-        if (self.rect.bottom == board.rect.top and
-            (board.rect.left <= self.rect.left <= board.rect.right or
-             board.rect.left <= self.rect.right <= board.rect.right)):
+        # If hit Paddle, deflect
+        if (self.rect.bottom == Paddle.rect.top and
+            (Paddle.rect.left <= self.rect.left <= Paddle.rect.right or
+             Paddle.rect.left <= self.rect.right <= Paddle.rect.right)):
             self.direction[1] *= -1
-            self.interact_ball_board
+            self.interact_ball_Paddle
     ()
 
-    def interact_ball_board(self):
-        # When board is moving, effects balls direction/speed
+    def interact_ball_Paddle(self):
+        # When Paddle is moving, effects balls direction/speed
         keystate = pygame.key.get_pressed()
-        if keystate[pygame.K_LEFT] and board.rect.left > 0:
+        if keystate[pygame.K_LEFT] and Paddle.rect.left > 0:
             self.direction[0] -= speed // 2
-        elif keystate[pygame.K_RIGHT] and board.rect.right < display_width:
+        elif keystate[pygame.K_RIGHT] and Paddle.rect.right < display_width:
             self.direction[0] += speed // 2
 
 
-class Board(pygame.sprite.Sprite):
-    """Initiates Board class and it's attributes"""
+class Paddle(pygame.sprite.Sprite):
+    """Initiates Paddle class and it's attributes"""
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -172,11 +172,11 @@ def control():
 
 
 # and adding all sprites on lists
-board = Board()
+Paddle = Paddle()
 ball = Ball()
 
-ball_board_sprites.add(board)
-ball_board_sprites.add(ball)
+ball_Paddle_sprites.add(Paddle)
+ball_Paddle_sprites.add(ball)
 
 
 def create_brick_list():
@@ -205,7 +205,7 @@ def render_text(screen):
 
 
 def render_main(screen):
-    ball_board_sprites.draw(screen)
+    ball_Paddle_sprites.draw(screen)
     brick_sprites.draw(screen)
     render_text(screen)
 
@@ -231,7 +231,7 @@ def main():
         update_collisions()
 
         # Update
-        ball_board_sprites.update()
+        ball_Paddle_sprites.update()
 
         # Render
         render_main(screen)
