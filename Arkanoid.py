@@ -56,6 +56,7 @@ class Ball(pygame.sprite.Sprite):
             self.direction[1] *= -1
 
     def ball_loss(self):
+        ###
         if self.rect.bottom >= settings.display_height:
             self.reset()
             reset_bricks()
@@ -63,6 +64,7 @@ class Ball(pygame.sprite.Sprite):
     def reset(self):
         self.rect.center = self.init_position()
         self.direction[1] *= -1
+        self.reset_angle()
         self.score = 0
 
     def deflect(self):
@@ -73,6 +75,8 @@ class Ball(pygame.sprite.Sprite):
             self.direction[1] *= -1
             self.interact_ball_paddle()
 
+    def reset_angle(self):
+        self.direction = random.choice([settings.diagonal_left, settings.diagonal_right])
 
     def interact_ball_paddle(self):
         # When Paddle is moving, effects balls direction/speed
