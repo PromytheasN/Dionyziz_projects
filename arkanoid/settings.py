@@ -31,4 +31,4 @@ brick_height = display_height // 100
 brick_dimentions = [brick_width, brick_height] 
 ball_dimentions = (display_height // 100, display_height // 100)
 
-print("Global settings imported")
+print("Global settings imported!")

@@ -3,8 +3,8 @@
 import sys
 import pygame
 import random
-import arkanoid.settings
-import arkanoid.brick
+from arkanoid import brick_pack
+from arkanoid import settings
 
 # Initializing text font
 pygame.font.init()
@@ -14,21 +14,6 @@ txt_font = pygame.font.SysFont("Score: ", settings.display_height//44)
 ball_paddle_sprites = pygame.sprite.Group()
 brick_sprites = pygame.sprite.Group()
 
-
-"""class Brick(pygame.sprite.Sprite):
-
-    def __init__(self, point_value, center):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface(settings.brick_dimentions)
-        self.image.fill(settings.purple)
-        self.rect = self.image.get_rect()
-        self.rect.center = center
-        self.point_value = point_value
-
-    def collide(self):
-        self.point_value -= 1
-        if self.point_value == 0:
-            self.kill() """
 
 class Ball(pygame.sprite.Sprite):
     """Initiates a moving ball and its' attributes"""
@@ -155,7 +140,7 @@ def create_brick_list():
     point_value = 3
     coordinates = [settings.display_width // 20 + settings.brick_width / 6, settings.display_height // 20]
     while i > 0:
-        brick = Brick(point_value, (coordinates))
+        brick = brick_pack.Brick(point_value, (coordinates))
         coordinates[0] += settings.brick_width * 1.1
         brick_sprites.add(brick)
         i -= 1
