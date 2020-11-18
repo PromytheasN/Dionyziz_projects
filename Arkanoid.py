@@ -56,7 +56,7 @@ class Ball(pygame.sprite.Sprite):
             self.direction[1] *= -1
 
     def ball_loss(self):
-        ###
+        # If ball is lost
         if self.rect.bottom >= settings.display_height:
             self.reset()
             reset_bricks()
@@ -79,7 +79,7 @@ class Ball(pygame.sprite.Sprite):
         self.direction = random.choice([settings.diagonal_left, settings.diagonal_right])
 
     def interact_ball_paddle(self):
-        # When Paddle is moving, effects balls direction/speed
+        # When Paddle moves, effects balls direction/speed
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_LEFT] and paddle.rect.left > 0:
             self.direction[0] -= settings.speed // 2
@@ -102,18 +102,8 @@ class Paddle(pygame.sprite.Sprite):
     def update(self):
         # Up-dates classes' position according to user's imput
         self.x_direction = 0
-        self.move()
+        control()
         self.rect.x += self.x_direction
-
-    def move(self):
-        # Creates movement and constrains object within screen dimentions
-        keystate = pygame.key.get_pressed()
-        if keystate[pygame.K_LEFT]:
-            if self.rect.left > 0:
-                self.x_direction = -settings.speed
-        elif keystate[pygame.K_RIGHT]:
-            if self.rect.right < settings.display_width:
-                self.x_direction = settings.speed
 
     def shoot(self):
         pass
@@ -123,6 +113,14 @@ class Paddle(pygame.sprite.Sprite):
 
 
 def control():
+
+    keystate = pygame.key.get_pressed()
+    if keystate[pygame.K_LEFT]:
+        if paddle.rect.left > 0:
+            paddle.x_direction = -settings.speed
+    elif keystate[pygame.K_RIGHT]:
+        if paddle.rect.right < settings.display_width:
+            paddle.x_direction = settings.speed
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
