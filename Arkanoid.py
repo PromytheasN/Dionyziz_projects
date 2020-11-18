@@ -6,11 +6,11 @@ import random
 from arkanoid import brick_pack
 from arkanoid import settings
 
-# Initializing text font.
+# Initializing text font
 pygame.font.init()
 txt_font = pygame.font.SysFont("Score: ", settings.display_height//44)
 
-# Initializing sprite lists.
+# Initializing sprite lists
 ball_paddle_sprites = pygame.sprite.Group()
 brick_sprites = pygame.sprite.Group()
 
@@ -26,20 +26,19 @@ class Ball(pygame.sprite.Sprite):
         self.rect.center = self.init_position()
         self.direction = random.choice([settings.diagonal_left, settings.diagonal_right])
         self.score = 0
-        self.ball_hit_paddle = self.deflect()
 
     def update(self):
         self.move()
 
     def init_position(self):
-        # Initialize position of the ball.
+        # Initialize position of the ball
         init_position = (paddle.rect.center[0],
                          (paddle.rect.center[1] - (settings.paddle_dimentions[1] / 2)
                           - (settings.ball_dimentions[1] / 2)))
         return init_position
 
     def collide(self):
-        # If hit bricks.
+        # If hit bricks
         self.direction[1] *= -1
         self.score += 1
 
@@ -57,7 +56,7 @@ class Ball(pygame.sprite.Sprite):
             self.direction[1] *= -1
 
     def ball_loss(self):
-        # If ball is lost.
+        # If ball is lost
         if self.rect.bottom >= settings.display_height:
             self.reset()
             reset_bricks()
@@ -69,28 +68,23 @@ class Ball(pygame.sprite.Sprite):
         self.score = 0
 
     def deflect(self):
-        # If hit Paddle, deflect.
-        if self.ball_paddle_check():
+        # If hit Paddle, deflect
+        if (self.rect.bottom == paddle.rect.top and
+            (paddle.rect.left <= self.rect.left <= paddle.rect.right or
+             paddle.rect.left <= self.rect.right <= paddle.rect.right)):
             self.direction[1] *= -1
-
-    def ball_paddle_check(self):
-        # Return if ball hits paddle.
-        ball_hit_paddle = (self.rect.bottom == paddle.rect.top and
-                          (paddle.rect.left <= self.rect.left <= paddle.rect.right or
-                          paddle.rect.left <= self.rect.right <= paddle.rect.right))
-        return ball_hit_paddle
-
+            self.interact_ball_paddle()
 
     def reset_angle(self):
         self.direction = random.choice([settings.diagonal_left, settings.diagonal_right])
 
-    """def interact_ball_paddle(self):
+    def interact_ball_paddle(self):
         # When Paddle moves, effects balls direction/speed
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_LEFT] and paddle.rect.left > 0:
             self.direction[0] -= settings.speed // 2
         elif keystate[pygame.K_RIGHT] and paddle.rect.right < settings.display_width:
-            self.direction[0] += settings.speed // 2"""
+            self.direction[0] += settings.speed // 2
 
 
 class Paddle(pygame.sprite.Sprite):
@@ -106,7 +100,7 @@ class Paddle(pygame.sprite.Sprite):
         self.x_direction = 0
 
     def update(self):
-        # Up-dates classes' position according to user's imput.
+        # Up-dates classes' position according to user's imput
         self.x_direction = 0
         control()
         self.rect.x += self.x_direction
@@ -123,19 +117,10 @@ def control():
     keystate = pygame.key.get_pressed()
     if keystate[pygame.K_LEFT]:
         if paddle.rect.left > 0:
-            #If key = left move paddle left.
             paddle.x_direction = -settings.speed
-            if ball.ball_paddle_check():
-                # If ball collides to paddle, and paddle on movement, change movement angle towards left.
-                ball.direction[0] -= settings.speed // 2
-
     elif keystate[pygame.K_RIGHT]:
         if paddle.rect.right < settings.display_width:
             paddle.x_direction = settings.speed
-            #If key = left move paddle right.
-            if ball.ball_paddle_check():
-                # If ball collides to paddle, and paddle on movement, change movement angle towards right.
-                ball.direction[0] += settings.speed // 2
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -143,7 +128,7 @@ def control():
             sys.exit()
 
 
-# and adding all sprites on lists.
+# and adding all sprites on lists
 paddle = Paddle()
 ball = Ball()
 
@@ -152,7 +137,7 @@ ball_paddle_sprites.add(ball)
 
 
 def create_brick_list():
-    # Creates and adds bricks into a list.
+    # Creates and adds bricks into a list
     i = 9
     point_value = 3
     coordinates = [settings.display_width // 20 + settings.brick_width / 6, settings.display_height // 20]
@@ -165,7 +150,7 @@ def create_brick_list():
 
 
 def reset_bricks():
-    # Reset brick list.
+    # Reset brick list
     brick_sprites.empty()
     create_brick_list()
     return brick_sprites
@@ -188,7 +173,7 @@ def update_collisions():
         for instance in list_of_collisions:
             instance.collide()
 
-# Game main.
+# Game main
 def main():
     pygame.init()
 
