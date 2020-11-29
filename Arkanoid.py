@@ -79,7 +79,7 @@ class Ball(pygame.sprite.Sprite):
         return ball_paddle_hit
 
     def reset_angle(self):
-        self.direction = random.choice([settings.diagonal_left, settings.diagonal_right])       
+        self.direction = random.choice([settings.diagonal_left, settings.diagonal_right])
 
 
 class Paddle(pygame.sprite.Sprite):
